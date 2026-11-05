@@ -9,13 +9,18 @@
   "cover_alt": "",
   "back_cover": "/media/03-composite-proof.jpg",
   "back_cover_alt": "",
-  "short_description": "",
-  "synopsis": "",
-  "genres": [],
-  "setting": "",
-  "publication_date": "",
+  "short_description": "**A warm, funny age-gap MM Christmas romance set in Edinburgh.** Fraser Lennox is forty-nine, silver-haired and impeccably tidy, and every child in Edinburgh knows him as the Tooth Fairy. Fionn Brennan is a twenty-four-year-old Irish actor between jobs. Fraser has to decide, before the bells ring on Christmas Eve, whether he cares more about what people think, or about the man who has turned his tidy life upside down.",
+  "synopsis": "**FRASER** They call me the Tooth Fairy. Every child in Edinburgh knows my name. I polish my late father’s brass plate. I wear good cardigans. I’m in bed by ten. And I live by one rule: give folk nothing to talk about.\n\nThen an elf falls into my chair.\n\n**FIONN** I’m twenty-four, Irish, between acting jobs and head elf in a department store grotto. I’m also terrified of dentists. So naturally I'm devastated when I chip a tooth on a candy cane.\n\n**FRASER** He’s loud. He’s glittery. He’s twenty-five years too young for me. He’s everything I’ve spent my life not being.\n\n**FIONN** He’s silver-haired, buttoned-up and the kindest man I’ve ever met. And he hasn’t stayed up past ten in a decade...I’m working on that.\n\n_Kissing the Tooth Fairy is a feel-good, MM Christmas romance between a man who’s spent his whole life giving folk nothing to talk about, and the elf who gives them all the gossip they need._",
+  "genres": [
+    "Gay",
+    "MM Romance",
+    "Fiction",
+    "Holidays"
+  ],
+  "setting": "Edinburgh, UK",
+  "publication_date": "2026-11-03",
   "page_count": null,
-  "status": "coming_soon",
+  "status": "published",
   "featured": true,
   "new_release": true,
   "sample": false,
@@ -36,22 +41,12 @@
   ],
   "formats": [
     {
-      "format": "Paperback",
-      "price": null,
-      "isbn": "",
-      "availability": "coming_soon",
-      "deal_price": null,
-      "amazon_url": "",
-      "other_url": "",
-      "other_label": ""
-    },
-    {
       "format": "eBook",
-      "price": null,
+      "price": 2.99,
       "isbn": "",
-      "availability": "coming_soon",
-      "deal_price": null,
-      "amazon_url": "",
+      "availability": "available",
+      "deal_price": 0,
+      "amazon_url": "https://www.amazon.co.uk/dp/B0HQ8BWZ8D",
       "other_url": "",
       "other_label": ""
     }
