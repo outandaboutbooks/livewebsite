@@ -430,6 +430,8 @@
       if (x.builtInOnly && !ctx.builtIn) return false;
       if (x.newOnly && ctx.builtIn) return false;
       if (x.builtInGroup && !ctx.builtIn) return false;
+      if (x.notFile && x.notFile.indexOf(ctx.file) >= 0) return false;
+      if (x.onlyFile && x.onlyFile.indexOf(ctx.file) < 0) return false;
       return true;
     };
     return schema.groups.filter(fits).map(function (g) {
@@ -502,9 +504,9 @@
       var back = schema.file ? null : h('p', { class: 'crumb' }, [h('a', { href: '#/' + key, text: '← All ' + schema.label.toLowerCase() })]);
       main.append(back || '', h('div', { class: 'head' }, [h('h1', { text: titleText }), schema.file ? h('p', { class: 'intro', text: schema.intro }) : null]));
       if (data.sample) main.append(h('p', { class: 'note', text: 'This is a sample listing. Replace its details with a real one, or delete it.' }));
-      var ctx = { builtIn: !!(schema.builtIn && schema.builtIn.indexOf(file) >= 0) };
+      var ctx = { builtIn: !!(schema.builtIn && schema.builtIn.indexOf(file) >= 0), file: file || '' };
       // Pages saved before the colour choice existed: show the colour the site actually uses, so saving doesn't change it.
-      if (key === 'pages' && !data.tone) data.tone = file === 'faq.json' ? 'sun' : file === 'contact.json' ? 'hot' : 'cobalt';
+      if (key === 'pages' && !data.tone) data.tone = file === 'faq.json' ? 'sun' : file === 'contact.json' ? 'hot' : file === 'news.json' ? 'purple' : 'cobalt';
       state.currentFile = file || '';
       var formEl = h('form', { class: 'form', novalidate: true, onsubmit: function (e) { e.preventDefault(); save(false); } }, renderForm(schema, data, ctx));
       state.rerender = function () {

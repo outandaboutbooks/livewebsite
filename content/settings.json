@@ -35,11 +35,11 @@
   "shop_heading": "Shop",
   "shop_intro": "Bookmarks, tote bags and T-shirts for readers who like to wear their hearts on their sleeves. And their bags.",
   "book_order": [
+    "kissing-the-tooth-fairy",
+    "cobwebs-corsets-and-coming-out",
     "kilts-castles-and-kissing-my-ex",
     "snowdonia-and-the-shepherd-s-son",
-    "cobwebs-corsets-and-coming-out",
-    "his-place-by-the-harbour",
-    "kissing-the-tooth-fairy"
+    "his-place-by-the-harbour"
   ],
   "books_tone": "navy",
   "shop_tone": "sun",
@@ -47,5 +47,13 @@
   "text_size": "standard",
   "heading_colour": "ink",
   "heading_font": "poppins",
-  "body_font": "work-sans"
+  "body_font": "work-sans",
+  "menu_order": [
+    "books",
+    "about",
+    "news",
+    "faq",
+    "contact"
+  ],
+  "submenu_order": {}
 }

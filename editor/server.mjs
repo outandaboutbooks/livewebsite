@@ -21,6 +21,13 @@ const PREVIEW_PORT = Number(process.env.PREVIEW_PORT || 3000);
 const HOST = '127.0.0.1';
 
 const COLLECTIONS = { books: 'books', merch: 'merch', pages: 'pages', news: 'news' };
+// The News page's settings live with the other built-in pages; create them the first time the editor runs.
+try {
+  const newsPage = path.join(CONTENT, 'pages', 'news.json');
+  if (fs.existsSync(path.join(CONTENT, 'pages')) && !fs.existsSync(newsPage)) {
+    fs.writeFileSync(newsPage, JSON.stringify({ title: 'News', slug: 'news', tone: 'purple', intro: '', body: '', menu_label: '' }, null, 2) + '\n');
+  }
+} catch { /* not essential */ }
 const FILES = { home: 'home.json', settings: 'settings.json' };
 const SAFE_NAME = /^[a-z0-9][a-z0-9-]{0,80}\.json$/;
 const SAFE_MEDIA = /^[a-z0-9][a-z0-9-]{0,80}\.(jpe?g|png|webp|svg|mp3|m4a)$/;
@@ -168,7 +175,7 @@ async function api(req, res, url) {
       const base = slugify(label);
       let file = `${base}.json`; let n = 2;
       while (fs.existsSync(path.join(dir, file))) file = `${base}-${n++}.json`;
-      if (parts[1] === 'pages' && ['books', 'series', 'shop', 'admin', 'media', 'assets', 'review', 'newsletter', 'contact', 'about', 'faq', 'privacy', 'cookies', 'terms', 'delivery-returns'].includes(base) && !fs.existsSync(path.join(dir, file)))
+      if (parts[1] === 'pages' && ['books', 'series', 'shop', 'news', 'admin', 'media', 'assets', 'review', 'newsletter', 'contact', 'about', 'faq', 'privacy', 'cookies', 'terms', 'delivery-returns'].includes(base) && !fs.existsSync(path.join(dir, file)))
         return send(res, 400, { error: `The web address /${base}/ is already used by the site. Choose a different title.` });
       const data = body.data && typeof body.data === 'object' ? body.data : {};
       if (parts[1] === 'pages') data.slug = file.replace(/\.json$/, '');

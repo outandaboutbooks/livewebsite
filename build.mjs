@@ -71,6 +71,11 @@ const DRAFT_URLS = new Set();
 for (const [slug, p] of Object.entries(PAGES)) {
   if (p.published === false) { if (DRAFTS) DRAFT_PAGES[slug] = p; delete PAGES[slug]; }
 }
+// The News page (content/pages/news.json) only holds the News page's title, introduction and colour:
+// the page itself is built from the news posts, further down. Unpublishing it switches news off on the website.
+const NEWS_PAGE = PAGES.news || DRAFT_PAGES.news || {};
+const NEWS_OFF = (NEWS_PAGE.published === false || (!PAGES.news && DRAFT_PAGES.news)) && !DRAFTS;
+delete PAGES.news; delete DRAFT_PAGES.news;
 
 const AVAIL = {
   available: { label: 'Available', order: 0, buyable: true },
@@ -161,8 +166,8 @@ let NEWS = (fs.existsSync(NEWS_DIR) ? fs.readdirSync(NEWS_DIR) : []).filter((f) 
     used.add(slug); n.slug = slug; n.url = `/news/${slug}/`;
   }
 }
-const isLive = (n) => n.published !== false && n.date <= TODAY;
-const DRAFT_NEWS = DRAFTS ? NEWS.filter((n) => !isLive(n)) : [];
+const isLive = (n) => !NEWS_OFF && n.published !== false && n.date <= TODAY;
+const DRAFT_NEWS = DRAFTS && !NEWS_OFF ? NEWS.filter((n) => !isLive(n)) : [];
 NEWS = NEWS.filter(isLive).sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
 const bookFor = (ref) => ref ? BOOKS.find((b) => b._file === ref || b.slug === ref) : null;
 // Book -> its launch post, while the launch is current.
@@ -196,7 +201,7 @@ const igIcon = (size) => `<img src="/assets/img/favicon.svg" alt="" width="${siz
 
 // Pages added in the editor can ask to be linked from the menu and/or the footer.
 const BUILT_IN_PAGES = ['about', 'faq', 'contact', 'privacy', 'cookies', 'terms', 'delivery-returns'];
-const RESERVED = ['books', 'series', 'shop', 'admin', 'media', 'assets', 'review', 'newsletter', 'send.php', '404.html'];
+const RESERVED = ['books', 'series', 'shop', 'news', 'admin', 'media', 'assets', 'review', 'newsletter', 'send.php', '404.html'];
 for (const slug of Object.keys(PAGES)) {
   if (RESERVED.includes(slug)) { console.log(`Skipped the page "${PAGES[slug].title}": its web address /${slug}/ is used by another part of the site. Give it a different title.`); delete PAGES[slug]; }
 }
@@ -220,7 +225,7 @@ const FOOTER_PAGES = Object.entries(PAGES).filter(([slug, p]) => !BUILT_IN_PAGES
 
 const NAV_ITEMS = [
   ['books', ['/books/', 'Our books']],
-  ...(NEWS.length || DRAFT_NEWS.length ? [['news', ['/news/', 'News']]] : []),
+  ...(NEWS.length || DRAFT_NEWS.length ? [['news', ['/news/', esc(String(NEWS_PAGE.menu_label || NEWS_PAGE.title || 'News').trim())]]] : []),
   ...(SHOP_ON ? [['shop', ['/shop/', 'Shop']]] : []),
   ...(PAGES.about ? [['about', ['/about/', 'About us', childrenOf('about').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
   ...MENU_PAGES.map(([slug, p]) => [slug, [pageUrl(slug), esc(navLabel(p)), childrenOf(slug).map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]),
@@ -938,8 +943,11 @@ for (const [slug, p] of [...Object.entries(PAGES), ...Object.entries(DRAFT_PAGES
 }
 
 // News: list page and one page per post.
-if (NEWS.length || DRAFT_NEWS.length) {
-  const tone = toneOr(S.news_tone, 'purple');
+const PAGES_NEWS_LIVE = NEWS_PAGE.published !== false;
+if (NEWS.length || DRAFT_NEWS.length || (DRAFTS && !NEWS_OFF)) {
+  const tone = toneOr(NEWS_PAGE.tone, toneOr(S.news_tone, 'purple'));
+  const newsTitle = String(NEWS_PAGE.title || S.news_heading || 'News').trim();
+  const newsIntro = NEWS_PAGE.intro || S.news_intro || '';
   const card = (n) => `<li class="news-card">
       ${n.image ? `<a class="news-card__img" href="${n.url}" tabindex="-1" aria-hidden="true"><img src="${esc(n.image)}" alt="" loading="lazy" decoding="async"></a>` : ''}
       <div class="news-card__body">
@@ -949,9 +957,9 @@ if (NEWS.length || DRAFT_NEWS.length) {
       </div>
     </li>`;
   add('/news/', layout({
-    title: S.news_heading || 'News', description: S.news_intro || `News from ${S.site_name}.`, current: '/news/', canonical: '/news/',
-    body: `${pageHead(S.news_heading || 'News', S.news_intro || '', { tone })}
-    <div class="wrap page-body">${NEWS.length ? `<ul class="news-list">${NEWS.map(card).join('')}</ul>` : '<p>No news yet.</p>'}</div>`,
+    draft: !PAGES_NEWS_LIVE, title: newsTitle, description: newsIntro || `News from ${S.site_name}.`, current: '/news/', canonical: '/news/',
+    body: `${pageHead(newsTitle, fill(newsIntro), { tone })}
+    <div class="wrap page-body">${NEWS_PAGE.body ? `<div class="prose news-intro">${md(fill(NEWS_PAGE.body))}</div>` : ''}${NEWS.length ? `<ul class="news-list">${NEWS.map(card).join('')}</ul>` : '<p>No news yet.</p>'}</div>`,
   }));
   for (const n of [...NEWS, ...DRAFT_NEWS]) {
     const draft = !NEWS.includes(n);

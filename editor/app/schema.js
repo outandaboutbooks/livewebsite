@@ -149,7 +149,7 @@ window.SCHEMA = (function () {
     pages: {
       label: 'Pages', single: 'page', titleField: 'title',
       intro: 'The built-in pages (About, Questions, Contact and the policies), plus any pages you add.',
-      builtIn: ['about.json', 'faq.json', 'contact.json', 'privacy.json', 'cookies.json', 'terms.json', 'delivery-returns.json'],
+      builtIn: ['about.json', 'faq.json', 'contact.json', 'news.json', 'privacy.json', 'cookies.json', 'terms.json', 'delivery-returns.json'],
       layouts: [['text', 'Text page'], ['image', 'Image and text'], ['cards', 'Cards'], ['gallery', 'Gallery'], ['feature', 'Feature']],
       newData: function (title, layout, parent) {
         return { title: title, slug: '', layout: layout || 'text', tone: 'cobalt', intro: '', body: '', parent: parent || '', show_in_menu: true, show_in_footer: true, menu_label: '',
@@ -160,10 +160,11 @@ window.SCHEMA = (function () {
           { name: 'published', label: 'Published on the website', type: 'bool', default: true, publish: true, help: 'Untick to take this page off the website: it disappears from the menu and footer too. It stays here in the editor, and you can still see it in Preview, marked as a draft. Links to it from your own text will stop working while it is unpublished. Keep the privacy policy published: the law expects one.' },
           { name: 'title', label: 'Page title', type: 'string', required: true },
           { name: 'parent', label: 'Parent page (put this page under another)', type: 'pageparent', newOnly: true, help: 'Any page in the top menu can have sub-pages: About us, Questions, Contact or a page you\'ve added. e.g. put Book launch under Events, or Meet the author under About us. It then appears in that page\'s drop-down menu, and its address becomes /events/book-launch/. One level only, so a sub-page can\'t have sub-pages of its own.' },
-          { name: 'layout', label: 'Layout', type: 'select', rerender: true, small: true, options: [['text', 'Text page'], ['image', 'Image and text'], ['cards', 'Cards'], ['gallery', 'Gallery'], ['feature', 'Feature']], help: 'Changing the layout keeps everything you have typed.' },
+          { name: 'layout', label: 'Layout', type: 'select', rerender: true, small: true, notFile: ['news.json'], options: [['text', 'Text page'], ['image', 'Image and text'], ['cards', 'Cards'], ['gallery', 'Gallery'], ['feature', 'Feature']], help: 'Changing the layout keeps everything you have typed.' },
           { name: 'tone', label: 'Title band colour', type: 'colour', notFor: ['feature'], options: TONE_OPTIONS },
+          { name: 'menu_label', label: 'Menu name (optional)', type: 'string', small: true, onlyFile: ['news.json'], help: 'A shorter name for the menu, e.g. News. The News page is in the menu once there is a post.' },
           { name: 'intro', label: 'Introduction', type: 'text', rich: 'inline', rows: 3, help: 'Shown under the title. On the Feature layout, this is the line under the big heading.' },
-          { name: 'needs_review', label: 'Needs legal review', type: 'bool', builtInOnly: true, help: "Shows a 'needs legal review' notice on the page. Untick once the page has been checked." },
+          { name: 'needs_review', label: 'Needs legal review', type: 'bool', builtInOnly: true, notFile: ['news.json'], help: "Shows a 'needs legal review' notice on the page. Untick once the page has been checked." },
         ] },
         { title: 'Picture and button', when: ['image', 'feature'], fields: [
           { name: 'image', label: 'Picture', type: 'image', kind: 'wide', help: 'Large images are shrunk automatically.' },
@@ -263,7 +264,6 @@ window.SCHEMA = (function () {
           { name: 'heading_colour', label: 'Heading colour', type: 'colour', paper: true, default: 'ink', options: [['ink', 'Charcoal (standard)']].concat(TONE_OPTIONS), help: 'For headings on the cream background. Headings on coloured bands and banners keep their white or dark text.' },
         ] },
         { title: 'Title band colours', fields: [
-          { name: 'news_tone', label: 'News pages', type: 'colour', default: 'purple', options: TONE_OPTIONS },
           { name: 'books_tone', label: 'Our books page', type: 'colour', default: 'hot', options: TONE_OPTIONS, help: 'Also used for the genre and series pages.' },
           { name: 'shop_tone', label: 'Shop page', type: 'colour', default: 'sun', options: TONE_OPTIONS },
         ] },
