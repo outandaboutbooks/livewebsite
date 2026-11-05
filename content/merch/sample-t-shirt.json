@@ -1,0 +1,13 @@
+{
+  "name": "Out. About. Unapologetic. T-shirt",
+  "slug": "sample-t-shirt",
+  "description": "Sample listing: an organic cotton T-shirt with the slogan on the front. Replace with your real product details.",
+  "price": 22.0,
+  "image": "/media/merch-tee.svg",
+  "image_alt": "",
+  "options": "",
+  "buy_url": "",
+  "buy_label": "",
+  "availability": "coming_soon",
+  "sample": true
+}

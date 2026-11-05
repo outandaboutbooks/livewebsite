@@ -1,0 +1,13 @@
+{
+  "name": "Tote bag",
+  "slug": "sample-tote-bag",
+  "description": "Sample listing: a heavy cotton canvas tote with the Out and About Books logo. Replace with your real product details.",
+  "price": 12.0,
+  "image": "/media/merch-tote.svg",
+  "image_alt": "",
+  "options": "",
+  "buy_url": "",
+  "buy_label": "",
+  "availability": "coming_soon",
+  "sample": true
+}

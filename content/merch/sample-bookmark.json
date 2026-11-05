@@ -1,0 +1,13 @@
+{
+  "name": "Bookmark set",
+  "slug": "sample-bookmark",
+  "description": "Sample listing: a set of three bookmarks in the brand colours. Replace with your real product details.",
+  "price": 5.0,
+  "image": "/media/merch-bookmark.svg",
+  "image_alt": "",
+  "options": "",
+  "buy_url": "",
+  "buy_label": "",
+  "availability": "coming_soon",
+  "sample": true
+}

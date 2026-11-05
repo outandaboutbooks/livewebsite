@@ -1,0 +1,51 @@
+{
+  "site_name": "Out and About Books",
+  "tagline": "Out. About. Unapologetic.",
+  "strapline": "Queer stories. Find your people. Find your place.",
+  "site_url": "https://outandaboutbooks.co.uk",
+  "meta_description": "Out and About Books is an independent imprint publishing LGBTQ+ fiction: love stories, mysteries and journeys set across the UK and Europe.",
+  "contact_email": "info@outandaboutbooks.co.uk",
+  "form_sender_email": "",
+  "trading_name": "Out & About Books",
+  "business_address": "",
+  "company_number": "",
+  "vat_number": "",
+  "social_links": [
+    {
+      "label": "TikTok",
+      "url": ""
+    },
+    {
+      "label": "Facebook",
+      "url": ""
+    },
+    {
+      "label": "Instagram",
+      "url": "https://www.instagram.com/outaboutbooks/"
+    }
+  ],
+  "newsletter_enabled": false,
+  "newsletter_heading": "Get the newsletter",
+  "newsletter_text": "New releases, the occasional free bonus story, and nothing else. Unsubscribe whenever you like.",
+  "show_sample_listings": false,
+  "amazon_note": "Books bought on Amazon are sold and delivered by Amazon. Prices on Amazon may differ from those shown here.",
+  "analytics_plausible_domain": "",
+  "reply_time": "",
+  "show_shop": false,
+  "shop_heading": "Shop",
+  "shop_intro": "Bookmarks, tote bags and T-shirts for readers who like to wear their hearts on their sleeves. And their bags.",
+  "book_order": [
+    "kilts-castles-and-kissing-my-ex",
+    "snowdonia-and-the-shepherd-s-son",
+    "cobwebs-corsets-and-coming-out",
+    "his-place-by-the-harbour",
+    "kissing-the-tooth-fairy"
+  ],
+  "books_tone": "navy",
+  "shop_tone": "sun",
+  "heading_size": "standard",
+  "text_size": "standard",
+  "heading_colour": "ink",
+  "heading_font": "poppins",
+  "body_font": "work-sans"
+}
