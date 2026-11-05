@@ -1,0 +1,55 @@
+# Publishes the website to your web host every time something changes on GitHub
+# (including every save in Pages CMS). It builds the site, then uploads it by SFTP.
+#
+# Set-up, once: on GitHub open the project, then Settings > Secrets and variables > Actions,
+# and add these "repository secrets" (your host gives you the details; on IONOS they're under
+# Hosting > SFTP & SSH):
+#   SFTP_HOST      e.g. access-12345.webspace-host.com
+#   SFTP_USER      your SFTP username
+#   SFTP_PASSWORD  your SFTP password
+#   SFTP_FOLDER    the folder your domain points to, e.g. /outandaboutbooks
+#                  Use a folder just for this website: anything else in it is deleted on each upload.
+# Until those are added, this only builds and checks the site; nothing is uploaded.
+
+name: Publish website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Rebuild once a day (about 1am UK time) so promotions start and end on their dates.
+  schedule:
+    - cron: "17 0 * * *"
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build the website
+        run: node build.mjs
+
+      - name: Upload to the web host
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_FOLDER: ${{ secrets.SFTP_FOLDER }}
+        run: |
+          if [ -z "$SFTP_HOST" ]; then
+            echo "No SFTP details added yet, so nothing was uploaded. The site built without errors."
+            exit 0
+          fi
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          lftp -e "set sftp:auto-confirm yes; set net:max-retries 2; \
+            mirror --reverse --delete --verbose --parallel=4 _site/ ${SFTP_FOLDER:-/}; bye" \
+            --env-password -u "$SFTP_USER" "sftp://$SFTP_HOST"
