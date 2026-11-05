@@ -53,6 +53,7 @@ function themeCss() {
   return `/* Made by the build from Site settings > Text styles. Don't edit by hand. */
 ${faces.join('\n')}
 :root { --display: ${fam(HEAD_FONT)}; --serif: ${fam(BODY_FONT)}; --ts: ${SCALE[S.text_size] || 1}; --hs: ${H_SCALE[S.heading_size] || 1}; }
+${PIN_ID ? `html[data-announce-closed="${PIN_ID}"] .announce { display: none; }` : ''}
 ${headingColour ? `.section-head h2, .how h2, .how__steps h3, .empty h2, .book__title, .book section > h2, .editions__h, .reviews h2, .review-form h3, .related h2, .prose h2, .prose h3, .contact__aside h2, .layout-card__body h2, .listen h2 { color: ${headingColour}; }` : ''}
 `;
 }
@@ -142,6 +143,39 @@ if (BOOK_ORDER_SET) {
   BOOKS = order.map((k) => BOOKS.find((b) => b._file === k));
 }
 
+// ---------- News (content/news) ----------
+// Posts appear newest first on /news/. A post dated in the future stays hidden until that day (the site rebuilds daily).
+// A post linked to a book can mark it as a launch: "New release" on the home page banner for 60 days, until unticked.
+// A pinned post shows a slim news bar at the top of every page until its "pin until" date.
+const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+const longDate = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const NEWS_DIR = path.join(ROOT, 'content/news');
+let NEWS = (fs.existsSync(NEWS_DIR) ? fs.readdirSync(NEWS_DIR) : []).filter((f) => f.endsWith('.json'))
+  .map((f) => ({ ...readJSON('content/news/' + f), _file: f.replace(/\.json$/, '') }))
+  .filter((n) => String(n.title || '').trim() && /^\d{4}-\d{2}-\d{2}$/.test(n.date || ''));
+{
+  const used = new Set();
+  for (const n of NEWS.sort((a, b) => a._file.localeCompare(b._file))) {
+    let slug = slugify(n.slug || n.title), k = 2;
+    while (used.has(slug) || slug === 'page') slug = slugify(n.slug || n.title) + '-' + k++;
+    used.add(slug); n.slug = slug; n.url = `/news/${slug}/`;
+  }
+}
+const isLive = (n) => n.published !== false && n.date <= TODAY;
+const DRAFT_NEWS = DRAFTS ? NEWS.filter((n) => !isLive(n)) : [];
+NEWS = NEWS.filter(isLive).sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
+const bookFor = (ref) => ref ? BOOKS.find((b) => b._file === ref || b.slug === ref) : null;
+// Book -> its launch post, while the launch is current.
+const LAUNCHES = new Map();
+for (const n of NEWS) {
+  const b = bookFor(n.book);
+  if (b && n.launch === true && TODAY <= addDays(n.date, 60) && !LAUNCHES.has(b)) LAUNCHES.set(b, n);
+}
+const launchWords = (b) => b.availability === 'available' ? ['New release', 'Out now'] : b.availability === 'pre_order' ? ['Coming soon', 'Pre-order now'] : ['Coming soon', 'Coming soon'];
+// The newest pinned post whose "pin until" date hasn't passed.
+const PIN = NEWS.find((n) => n.pin && (!n.pin_until || TODAY <= n.pin_until)) || null;
+const PIN_ID = PIN ? (PIN.slug + '-' + PIN.date + '-' + (PIN.pin_until || '')).replace(/[^a-z0-9-]/gi, '') : '';
+
 const GENRES = [...new Set(BOOKS.flatMap((b) => b.genres))].sort();
 const FORMATS = [...new Set(BOOKS.flatMap((b) => b.formats.map((f) => f.format)))];
 const SERIES = [...new Set(BOOKS.map((b) => b.series).filter(Boolean))];
@@ -186,6 +220,7 @@ const FOOTER_PAGES = Object.entries(PAGES).filter(([slug, p]) => !BUILT_IN_PAGES
 
 const NAV_ITEMS = [
   ['books', ['/books/', 'Our books']],
+  ...(NEWS.length || DRAFT_NEWS.length ? [['news', ['/news/', 'News']]] : []),
   ...(SHOP_ON ? [['shop', ['/shop/', 'Shop']]] : []),
   ...(PAGES.about ? [['about', ['/about/', 'About us', childrenOf('about').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
   ...MENU_PAGES.map(([slug, p]) => [slug, [pageUrl(slug), esc(navLabel(p)), childrenOf(slug).map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]),
@@ -250,6 +285,7 @@ ${analytics}
 </head>
 <body${RELATIVE ? ' data-preview="true"' : ''}>
 <a class="skip" href="#main">Skip to content</a>
+${PIN ? `<aside class="announce" data-announce="${PIN_ID}" aria-label="News"><div class="wrap announce__inner"><span class="announce__tag">News</span><p class="announce__text">${ti(PIN.pin_text || PIN.title)}</p><a class="announce__link" href="${PIN.url}">Find out more<span class="visually-hidden">: ${esc(PIN.title)}</span></a><button type="button" class="announce__x" data-announce-close hidden aria-label="Hide this news"><span aria-hidden="true">&times;</span></button></div></aside>` : ''}
 <header class="site-header">
   <div class="wrap site-header__inner">
     <a class="site-header__brand" href="/" aria-label="${esc(S.site_name)}, home">${wordmark()}<img class="site-flag" src="/assets/img/brand/pride-flag.svg" alt="" width="63" height="40"></a>
@@ -470,7 +506,10 @@ const add = (urlPath, html) => { pages[urlPath] = html; };
   // Reader quotes chosen for the home page (up to three, real books before samples).
   const homeQuotes = [...BOOKS.filter((b) => !b.sample), ...BOOKS.filter((b) => b.sample)]
     .flatMap((b) => cleanReviews(b).filter((r) => r.home).map((r) => ({ r, b }))).slice(0, 3);
-  const heroBooks = [...BOOKS.filter((b) => b.featured && !b.sample), ...BOOKS.filter((b) => b.featured && b.sample)].slice(0, 6);
+  const heroBooks = [...new Set([...LAUNCHES.keys(), ...BOOKS.filter((b) => b.featured && !b.sample), ...BOOKS.filter((b) => b.featured && b.sample)])].slice(0, 6);
+  const sticker = (b) => LAUNCHES.has(b) ? `<span class="new-sticker" aria-hidden="true">${launchWords(b)[0]}</span>` : '';
+  const launchLink = (b, i, hide) => LAUNCHES.has(b) ? `<a class="launch-link" href="${LAUNCHES.get(b).url}" data-hero-launch="${i}"${hide ? ' hidden' : ''}><span class="launch-link__tag">${launchWords(b)[1]}</span>Read the launch news<span class="visually-hidden">: ${esc(b.title)}</span> <span aria-hidden="true">&rarr;</span></a>` : '';
+  const heroLead = heroBooks.length === 1 ? heroBooks[0] : lead;
   const heroLines = HOME.hero_heading.split(/(?<=\.)\s+/);
   const body = `
   <div class="bold-hero"><section class="bold-hero__inner wrap">
@@ -481,12 +520,13 @@ const add = (urlPath, html) => { pages[urlPath] = html; };
       <p class="bold-hero__actions"><a class="btn btn--light" href="/books/">${esc(HOME.hero_button)}</a> <a class="btn btn--ghost" href="#how-to-buy">How to buy</a></p>
     </div>
     ${heroBooks.length > 1 ? `<div class="hero-books" data-hero-cycle aria-roledescription="carousel" aria-label="Featured books">
-      ${heroBooks.map((hb, i) => `<a class="bold-hero__book${i === 0 ? ' is-active' : ''}" href="${hb.url}"${i ? ' inert aria-hidden="true"' : ''}>${cover(hb, { size: 'lg', eager: i === 0 })}</a>`).join('')}
+      ${heroBooks.map((hb, i) => `<a class="bold-hero__book${i === 0 ? ' is-active' : ''}${LAUNCHES.has(hb) ? ' is-launch' : ''}" href="${hb.url}"${i ? ' inert aria-hidden="true"' : ''}>${sticker(hb)}${cover(hb, { size: 'lg', eager: i === 0 })}${LAUNCHES.has(hb) ? `<span class="visually-hidden"> (${launchWords(hb)[0]})</span>` : ''}</a>`).join('')}
       <div class="hero-books__controls">
         <button type="button" class="hero-books__pause" data-hero-pause aria-pressed="false"><span class="visually-hidden">Pause the featured books</span><span aria-hidden="true" class="hero-books__pause-icon"></span></button>
         ${heroBooks.map((hb, i) => `<button type="button" class="hero-books__dot" data-hero-dot="${i}" aria-label="Show ${esc(hb.title)}"${i === 0 ? ' aria-current="true"' : ''}></button>`).join('')}
       </div>
-    </div>` : lead ? `<a class="bold-hero__book" href="${lead.url}">${cover(lead, { size: 'lg', eager: true })}</a>` : ''}
+      ${heroBooks.map((hb, i) => launchLink(hb, i, i !== 0)).join('')}
+    </div>` : heroLead ? `<div class="hero-books hero-books--single"><a class="bold-hero__book${LAUNCHES.has(heroLead) ? ' is-launch' : ''}" href="${heroLead.url}">${sticker(heroLead)}${cover(heroLead, { size: 'lg', eager: true })}</a>${launchLink(heroLead, 0, false)}</div>` : ''}
   </section></div>
   ${(HOME.ticker || []).length ? `<div class="ticker" aria-hidden="true"><div class="ticker__track">${Array(4).fill((HOME.ticker || []).map((w) => `<span>${esc(w)}</span>`).join('')).join('')}</div></div>` : ''}
   <section class="shelf wrap" aria-labelledby="shelf-h">
@@ -895,6 +935,44 @@ for (const [slug, p] of [...Object.entries(PAGES), ...Object.entries(DRAFT_PAGES
     og: p.image ? { image: p.image } : {},
     body: renderPage(slug, p),
   }));
+}
+
+// News: list page and one page per post.
+if (NEWS.length || DRAFT_NEWS.length) {
+  const tone = toneOr(S.news_tone, 'purple');
+  const card = (n) => `<li class="news-card">
+      ${n.image ? `<a class="news-card__img" href="${n.url}" tabindex="-1" aria-hidden="true"><img src="${esc(n.image)}" alt="" loading="lazy" decoding="async"></a>` : ''}
+      <div class="news-card__body">
+        <p class="news-card__date"><time datetime="${n.date}">${longDate(n.date)}</time>${LAUNCHES.get(bookFor(n.book)) === n ? ' <span class="news-card__tag">Book launch</span>' : ''}</p>
+        <h2 class="news-card__title"><a href="${n.url}">${t(n.title)}</a></h2>
+        ${n.summary ? `<p>${ti(n.summary)}</p>` : ''}
+      </div>
+    </li>`;
+  add('/news/', layout({
+    title: S.news_heading || 'News', description: S.news_intro || `News from ${S.site_name}.`, current: '/news/', canonical: '/news/',
+    body: `${pageHead(S.news_heading || 'News', S.news_intro || '', { tone })}
+    <div class="wrap page-body">${NEWS.length ? `<ul class="news-list">${NEWS.map(card).join('')}</ul>` : '<p>No news yet.</p>'}</div>`,
+  }));
+  for (const n of [...NEWS, ...DRAFT_NEWS]) {
+    const draft = !NEWS.includes(n);
+    const b = bookFor(n.book);
+    add(n.url, layout({
+      draft, title: n.title, description: n.summary || n.body, current: '/news/', canonical: n.url,
+      og: { type: 'article', image: n.image || (b && b.cover) || '' },
+      body: `${pageHead(n.title, '', { tone })}
+    <article class="wrap news-post">
+      <p class="news-post__date"><time datetime="${n.date}">${longDate(n.date)}</time>${draft && n.date > TODAY ? ` · <strong>Scheduled: appears on the website on this date</strong>` : ''}</p>
+      ${n.image ? `<figure class="news-post__img"><img src="${esc(n.image)}" alt="${esc(n.image_alt || '')}" decoding="async"></figure>` : ''}
+      <div class="prose">${n.summary && !n.body ? `<p>${ti(n.summary)}</p>` : md(fill(n.body || ''))}</div>
+      ${b ? `<aside class="news-book" aria-label="The book">
+        <a class="news-book__cover" href="${b.url}" tabindex="-1" aria-hidden="true">${cover(b, { size: 'md', decorative: true })}</a>
+        <div><p class="news-book__kicker">${LAUNCHES.get(b) === n ? launchWords(b)[0] : 'The book'}</p><h2 class="news-book__title">${t(b.title)}</h2><p class="news-book__by">by ${esc(b.author || '')}</p>
+        <p><a class="btn btn--secondary" href="${b.url}">See the book</a></p></div>
+      </aside>` : ''}
+      <p class="news-post__back"><a href="/news/">&larr; All news</a></p>
+    </article>`,
+    }));
+  }
 }
 
 // Contact

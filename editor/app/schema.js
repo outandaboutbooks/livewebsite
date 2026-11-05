@@ -117,6 +117,35 @@ window.SCHEMA = (function () {
         ] },
       ],
     },
+    news: {
+      label: 'News', single: 'news post', titleField: 'title',
+      intro: 'News posts, newest first on the News page (in the top menu once there is a post). A post dated in the future stays hidden until that day.',
+      newData: function (title) {
+        var d = new Date(); var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+        return { title: title, date: today, summary: '', image: '', image_alt: '', body: '', book: '', launch: false, pin: false, pin_text: '', pin_until: '', slug: '' };
+      },
+      groups: [
+        { title: 'The post', fields: [
+          { name: 'published', label: 'Published on the website', type: 'bool', default: true, publish: true, help: 'Untick to keep this post as a draft. It stays here, and you can still see it in Preview, marked as a draft.' },
+          { name: 'title', label: 'Headline', type: 'string', required: true },
+          { name: 'date', label: 'Date', type: 'date', small: true, help: 'Shown on the post. Posts are listed newest first. A future date keeps the post hidden until that day.' },
+          { name: 'summary', label: 'Summary', type: 'text', rich: 'inline', rows: 2, help: 'One or two sentences for the News page and for Google.' },
+          { name: 'image', label: 'Picture (optional)', type: 'image', kind: 'wide', help: 'A landscape picture works best.' },
+          { name: 'image_alt', label: 'Picture description (for screen readers)', type: 'string' },
+          { name: 'body', label: 'The full post', type: 'text', rich: 'block', rows: 12 },
+          { name: 'slug', label: 'Web address', type: 'string', help: 'Leave blank to make one from the headline, e.g. /news/launch-evening/.' },
+        ] },
+        { title: 'Book', fields: [
+          { name: 'book', label: 'Which book is this about? (optional)', type: 'bookpick', help: 'Shows the book, with a button to its page, at the end of the post.' },
+          { name: 'launch', label: 'This is the book\'s launch: promote it on the home page', type: 'bool', default: false, help: 'For 60 days from the post\'s date, the book goes first in the big banner on the home page with a "New release" sticker (or "Coming soon" before it\'s out) and a "Read the launch news" button. Untick to stop early. Leave unticked for other news about the book, such as a cover reveal.' },
+        ] },
+        { title: 'News bar on every page', fields: [
+          { name: 'pin', label: 'Pin this post to the top of every page', type: 'bool', help: 'Shows a slim yellow news bar above the menu, with a link to this post. If several posts are pinned, the newest is shown. Visitors can close it.' },
+          { name: 'pin_text', label: 'Text for the news bar', type: 'string', help: 'One short line, e.g. Launch evening and reading: Saturday 14 March, 7pm. Leave blank to use the headline.' },
+          { name: 'pin_until', label: 'Show the news bar until', type: 'date', small: true, help: 'The bar disappears after this day. Leave blank to keep it until you untick Pin.' },
+        ] },
+      ],
+    },
     pages: {
       label: 'Pages', single: 'page', titleField: 'title',
       intro: 'The built-in pages (About, Questions, Contact and the policies), plus any pages you add.',
@@ -234,6 +263,7 @@ window.SCHEMA = (function () {
           { name: 'heading_colour', label: 'Heading colour', type: 'colour', paper: true, default: 'ink', options: [['ink', 'Charcoal (standard)']].concat(TONE_OPTIONS), help: 'For headings on the cream background. Headings on coloured bands and banners keep their white or dark text.' },
         ] },
         { title: 'Title band colours', fields: [
+          { name: 'news_tone', label: 'News pages', type: 'colour', default: 'purple', options: TONE_OPTIONS },
           { name: 'books_tone', label: 'Our books page', type: 'colour', default: 'hot', options: TONE_OPTIONS, help: 'Also used for the genre and series pages.' },
           { name: 'shop_tone', label: 'Shop page', type: 'colour', default: 'sun', options: TONE_OPTIONS },
         ] },

@@ -201,3 +201,4 @@ input.colour__code { width: 120px; font-family: ui-monospace, Consolas, monospac
 .fontpick__sample--h { font-size: 1.35rem; font-weight: 700; line-height: 1.15; }
 .colour__sample--paper { border-top: 0; }
 .colour__sample--paper strong { font-size: 1.6rem; }
+.thumb--wide { width: 72px; aspect-ratio: 3 / 2; border-radius: 6px; }

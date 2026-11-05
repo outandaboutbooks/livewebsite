@@ -127,6 +127,16 @@
 
     if (f.type === 'colour') return colourField(f, obj, id, help, wrap, set);
     if (f.type === 'font') return fontField(f, obj, id, help, wrap, set);
+    if (f.type === 'bookpick') {
+      var bsel = h('select', { id: id, 'aria-describedby': describedby, onchange: function () { set(bsel.value); } }, [h('option', { value: '', text: 'No book' })]);
+      api('GET', 'list/books').then(function (books) {
+        books.forEach(function (b) { var v = b.file.replace(/\.json$/, ''); bsel.append(h('option', { value: v, text: b.title + (b.unpublished ? ' (unpublished)' : '') })); });
+        bsel.value = val || '';
+        if (val && bsel.value !== val) bsel.append(h('option', { value: val, text: val + ' (not found)' })), bsel.value = val;
+      });
+      wrap.append(h('label', { for: id, text: f.label }), bsel, help || '');
+      return wrap;
+    }
     if (f.type === 'text' && f.rich && window.RichText) {
       var lab = h('span', { class: 'label', id: id + '-label', text: f.label, onclick: function () { box.area.focus(); } });
       var box = window.RichText.create({ id: id, mode: f.rich, links: f.links !== false, headings: f.headings !== false, rows: f.rows, value: val || '', label: f.label,
@@ -440,7 +450,7 @@
 
   function listView(key) {
     var schema = S[key];
-    setNav(key); state.previewPath = key === 'books' ? '/books/' : key === 'merch' ? '/shop/' : '/';
+    setNav(key); state.previewPath = key === 'books' ? '/books/' : key === 'merch' ? '/shop/' : key === 'news' ? '/news/' : '/';
     main.innerHTML = '';
     main.append(h('div', { class: 'head' }, [h('h1', { text: schema.label }), h('p', { class: 'intro', text: schema.intro })]));
     if (!schema.noNew) {
@@ -464,7 +474,7 @@
       listEl.innerHTML = '';
       if (!items.length) listEl.append(h('li', { class: 'empty', text: 'Nothing here yet.' }));
       items.forEach(function (it) {
-        var thumb = key === 'pages' ? null : h('span', { class: 'thumb thumb--' + (key === 'merch' ? 'square' : 'cover') }, [it.cover ? h('img', { src: it.cover, alt: '', loading: 'lazy' }) : h('span', { text: 'No image' })]);
+        var thumb = key === 'pages' ? null : h('span', { class: 'thumb thumb--' + (key === 'merch' ? 'square' : key === 'news' ? 'wide' : 'cover') }, [it.cover ? h('img', { src: it.cover, alt: '', loading: 'lazy' }) : h('span', { text: 'No image' })]);
         listEl.append(h('li', {}, [h('a', { href: '#/' + key + '/' + it.file }, [thumb, h('span', { class: 'items__text' }, [
           h('strong', { text: it.title }), it.sub ? h('span', { text: it.sub }) : null,
           it.unpublished ? h('span', { class: 'tag tag--off', text: 'Unpublished' }) : null,
@@ -486,6 +496,7 @@
       if (key === 'books') state.previewPath = '/books/' + (data.slug || slug(data.title)) + '/';
       else if (key === 'pages') state.previewPath = '/' + (data.parent ? data.parent + '/' : '') + (data.slug || file.replace(/\.json$/, '')) + '/';
       else if (key === 'merch') state.previewPath = '/shop/';
+      else if (key === 'news') state.previewPath = '/news/' + (data.slug || slug(data.title)) + '/';
       else state.previewPath = '/';
       main.innerHTML = '';
       var back = schema.file ? null : h('p', { class: 'crumb' }, [h('a', { href: '#/' + key, text: '← All ' + schema.label.toLowerCase() })]);
@@ -582,14 +593,16 @@
     main.append(h('div', { class: 'head' }, [h('h1', { text: 'Menu order' }), h('p', { class: 'intro', text: 'Drag items by their handle (or use Up and Down) to change the order of the menu at the top of every page, and of the pages inside each drop-down. Only pages ticked "Show in the menu" are listed.' })]));
     var box = h('div', {}, [h('p', { class: 'loading', text: 'Loading…' })]);
     main.append(box);
-    Promise.all([api('GET', 'list/pages'), api('GET', 'file/settings')]).then(function (res) {
+    var hasNews = false;
+    Promise.all([api('GET', 'list/pages'), api('GET', 'file/settings'), api('GET', 'list/news')]).then(function (res) {
       var pages = res[0], settings = res[1];
+      hasNews = res[2].length > 0;
       return Promise.all(pages.map(function (it) { return api('GET', 'item/pages/' + it.file).then(function (d) { return { slug: it.file.replace(/\.json$/, ''), title: d.menu_label || d.title, parent: d.parent || '', menu: !!d.show_in_menu, builtIn: S.pages.builtIn.indexOf(it.file) >= 0 }; }); }))
         .then(function (all) { draw(all, settings); });
     }).catch(function (e) { box.innerHTML = ''; box.append(h('p', { class: 'note note--bad', text: e.message })); });
 
     function draw(all, settings) {
-      var items = [['books', 'Our books']].concat(settings.show_shop ? [['shop', 'Shop']] : [], [['about', 'About us']],
+      var items = [['books', 'Our books']].concat(hasNews ? [['news', 'News']] : [], settings.show_shop ? [['shop', 'Shop']] : [], [['about', 'About us']],
         all.filter(function (p) { return !p.builtIn && !p.parent && p.menu; }).map(function (p) { return [p.slug, p.title]; }),
         [['faq', 'Questions'], ['contact', 'Contact']]);
       var keys = items.map(function (x) { return x[0]; });

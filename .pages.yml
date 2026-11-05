@@ -213,6 +213,33 @@ content:
       - { name: buy_label, label: Buy button text, type: string, description: "Optional. Defaults to Buy now." }
       - { name: sample, label: Sample listing (not a real product), type: boolean }
 
+  - name: news
+    label: News
+    type: collection
+    path: content/news
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, date, pin]
+      sort: [date]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - { name: title, label: Headline, type: string, required: true }
+      - { name: published, label: Published on the website, type: boolean, default: true, description: "Untick to keep it as a draft." }
+      - { name: date, label: Date, type: date, required: true, description: "Posts are listed newest first. A future date keeps the post hidden until that day." }
+      - { name: summary, label: Summary, type: text, description: "One or two sentences for the News page and for Google." }
+      - { name: image, label: Picture (optional), type: image }
+      - { name: image_alt, label: Picture description, type: string }
+      - { name: body, label: The full post, type: text, description: "## for a heading, **bold**, _italic_, [link text](https://…), - for a bullet." }
+      - { name: slug, label: Web address, type: string, description: "Leave blank to make one from the headline." }
+      - { name: book, label: Book this is about (optional), type: string, description: "The book's file name without .json, e.g. kilts-castles-and-kissing-my-ex." }
+      - { name: launch, label: This is the book's launch (promote on the home page for 60 days), type: boolean, default: false }
+      - { name: pin, label: Pin to the top of every page, type: boolean, default: false }
+      - { name: pin_text, label: Text for the news bar, type: string, description: "One short line. Leave blank to use the headline." }
+      - { name: pin_until, label: Show the news bar until, type: date, description: "Leave blank to keep it until you untick Pin." }
   - name: home
     label: Home page text
     type: file

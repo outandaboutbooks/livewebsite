@@ -20,7 +20,7 @@ const EDITOR_PORT = Number(process.env.EDITOR_PORT || 3001);
 const PREVIEW_PORT = Number(process.env.PREVIEW_PORT || 3000);
 const HOST = '127.0.0.1';
 
-const COLLECTIONS = { books: 'books', merch: 'merch', pages: 'pages' };
+const COLLECTIONS = { books: 'books', merch: 'merch', pages: 'pages', news: 'news' };
 const FILES = { home: 'home.json', settings: 'settings.json' };
 const SAFE_NAME = /^[a-z0-9][a-z0-9-]{0,80}\.json$/;
 const SAFE_MEDIA = /^[a-z0-9][a-z0-9-]{0,80}\.(jpe?g|png|webp|svg|mp3|m4a)$/;
@@ -109,14 +109,15 @@ function listCollection(name) {
     return {
       file: f,
       title: d.title || d.name || f,
-      sub: name === 'books' ? [d.author, d.series ? `${d.series}${d.series_number ? ' ' + d.series_number : ''}` : ''].filter(Boolean).join(' · ') : name === 'pages' ? `/${d.parent ? d.parent + '/' : ''}${d.slug || f.replace(/\.json$/, '')}/` + (d.layout && d.layout !== 'text' ? ` · ${{ image: 'Image and text', cards: 'Cards', gallery: 'Gallery', feature: 'Feature' }[d.layout] || ''}` : '') : '',
+      date: d.date || '',
+      sub: name === 'news' ? [d.date ? new Date(d.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'No date', d.date && d.date > new Date().toISOString().slice(0, 10) ? 'Scheduled' : '', d.pin ? 'Pinned' : '', d.book && d.launch === true ? 'Book launch' : ''].filter(Boolean).join(' · ') : name === 'books' ? [d.author, d.series ? `${d.series}${d.series_number ? ' ' + d.series_number : ''}` : ''].filter(Boolean).join(' · ') : name === 'pages' ? `/${d.parent ? d.parent + '/' : ''}${d.slug || f.replace(/\.json$/, '')}/` + (d.layout && d.layout !== 'text' ? ` · ${{ image: 'Image and text', cards: 'Cards', gallery: 'Gallery', feature: 'Feature' }[d.layout] || ''}` : '') : '',
       sample: !!d.sample,
       cover: d.cover || d.image || '',
       draftFlag: name === 'pages' ? !!d.needs_review : false,
       parent: name === 'pages' ? (d.parent || '') : '',
       unpublished: d.published === false,
     };
-  }).sort((a, b) => Number(a.sample) - Number(b.sample) || String(a.title).localeCompare(String(b.title)));
+  }).sort((a, b) => name === 'news' ? String(b.date).localeCompare(String(a.date)) : Number(a.sample) - Number(b.sample) || String(a.title).localeCompare(String(b.title)));
 }
 
 // Only accept requests from the editor page itself.

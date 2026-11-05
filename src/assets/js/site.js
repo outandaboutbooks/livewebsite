@@ -111,6 +111,8 @@
       if (on) { s.removeAttribute('inert'); s.removeAttribute('aria-hidden'); } else { s.setAttribute('inert', ''); s.setAttribute('aria-hidden', 'true'); }
     });
     dots.forEach(function (d, i) { if (i === current) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+    // "Read the launch news" shows only while its book is on display.
+    box.querySelectorAll('[data-hero-launch]').forEach(function (a) { a.hidden = Number(a.getAttribute('data-hero-launch')) !== current; });
   }
   function stop() { clearInterval(timer); timer = null; }
   function start() { stop(); if (!paused && !hovering) timer = setInterval(function () { show(current + 1); }, 5000); }
@@ -240,4 +242,19 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true' && window.innerWidth <= 820) { setOpen(false); toggle.focus(); } });
   // On a section page, open that section's list when the phone menu opens.
   dds.forEach(function (d) { if (d.classList.contains('is-current') && window.innerWidth <= 820) d.querySelector('.dd__btn').setAttribute('aria-expanded', 'true'); });
+})();
+
+// News bar: the × hides it for this visitor until a different post is pinned.
+(function () {
+  var bar = document.querySelector('[data-announce]');
+  if (!bar) return;
+  var x = bar.querySelector('[data-announce-close]');
+  x.hidden = false;
+  x.addEventListener('click', function () {
+    var id = bar.getAttribute('data-announce');
+    try { localStorage.setItem('oab-announce-closed', id); } catch (e) { /* storage blocked */ }
+    document.documentElement.setAttribute('data-announce-closed', id);
+    bar.hidden = true;
+    var main = document.getElementById('main'); if (main) main.focus({ preventScroll: true });
+  });
 })();
