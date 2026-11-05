@@ -353,6 +353,7 @@ h1, h2, h3, .section-head h2, .how h2, .imprint h2, .newsletter h2, .page-head h
 .section-head h2, .how h2, .related h2 { font-size: calc(clamp(2rem, 4vw, 3rem) * var(--hs, 1)); }
 .btn { font-family: var(--display); font-weight: 600; border-radius: 999px; padding-inline: 1.6em; }
 .btn--primary { background: var(--ink); }
+.btn--primary:hover { background: var(--hot); border-color: var(--hot); color: #fff; }
 .btn--light { background: #fff; color: var(--ink); } .btn--light:hover { background: var(--sun); }
 .btn--ghost { color: #fff; border: 2px solid rgba(255,255,255,.8); } .btn--ghost:hover { background: rgba(255,255,255,.15); }
 .bold-hero { background: var(--hot); color: #fff; overflow: hidden; }

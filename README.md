@@ -303,4 +303,6 @@ Shopify can also embed its own "Buy" buttons into pages. A developer (or Claude)
 
 GitHub Pages can't run send.php, so on GitHub Pages the newsletter and review forms are hidden and the contact page shows a short note (with your Instagram link) instead of the form. On a free GitHub account the repository must be public, so anyone can read the content folder, including unpublished pages.
 
+**Publishing changes with GitHub Desktop:** your website folder on your PC is the `livewebsite` folder that GitHub Desktop cloned. Edit and preview as usual, then in GitHub Desktop type a short summary, click **Commit to main** and then **Push origin**. The live site updates about two minutes later (watch for the green tick in the **Actions** tab). Update packs: extract into the same folder, choose Replace, then commit and push. To undo a published change, right-click it in the **History** tab and choose **Revert**, then push.
+
 If you later move to a host that runs PHP (e.g. IONOS), use `publish.yml` instead and the forms come back automatically.
