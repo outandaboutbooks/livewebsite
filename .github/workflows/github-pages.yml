@@ -31,15 +31,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
 
       # Gives the site's address (github.io or your own domain) to the build.
       - id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       # Works whether the website files are at the top of the repository or inside a folder.
       - name: Find the website folder
