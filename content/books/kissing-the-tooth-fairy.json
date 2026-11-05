@@ -1,0 +1,59 @@
+{
+  "title": "Kissing The Tooth Fairy",
+  "subtitle": "",
+  "slug": "",
+  "author": "Robin hartes",
+  "series": "",
+  "series_number": null,
+  "cover": "",
+  "cover_alt": "",
+  "back_cover": "",
+  "back_cover_alt": "",
+  "short_description": "",
+  "synopsis": "",
+  "genres": [],
+  "setting": "",
+  "publication_date": "",
+  "page_count": null,
+  "status": "coming_soon",
+  "featured": false,
+  "new_release": false,
+  "sample": true,
+  "promotion": {
+    "enabled": false,
+    "label": "",
+    "message": "",
+    "start": "",
+    "end": ""
+  },
+  "excerpts": [
+    {
+      "title": "Audio Excerpt 1",
+      "narrator": "",
+      "audio": "/media/elevenlabs-2026-10-24t14-01-23-ben-warm-british-male-pvc-sp110-s50-sb1.mp3",
+      "transcript": ""
+    }
+  ],
+  "formats": [
+    {
+      "format": "Paperback",
+      "price": null,
+      "isbn": "",
+      "availability": "coming_soon",
+      "deal_price": null,
+      "amazon_url": "",
+      "other_url": "",
+      "other_label": ""
+    },
+    {
+      "format": "eBook",
+      "price": null,
+      "isbn": "",
+      "availability": "coming_soon",
+      "deal_price": null,
+      "amazon_url": "",
+      "other_url": "",
+      "other_label": ""
+    }
+  ]
+}
