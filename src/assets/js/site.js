@@ -77,7 +77,7 @@
 // Front/back cover switch on book pages. Without JavaScript the thumbnails open the full image.
 (function () {
   document.querySelectorAll('.cover-switch').forEach(function (group) {
-    var main = group.parentElement.querySelector('.cover img');
+    var main = (group.closest('.book__cover') || group.parentElement).querySelector('.cover img');
     if (!main) return;
     group.querySelectorAll('[data-cover-src]').forEach(function (btn) {
       btn.setAttribute('role', 'button');
@@ -136,7 +136,7 @@
   if (!players.length) return;
   function fmt(s) { if (!isFinite(s)) return '–:––'; s = Math.floor(s); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
   var audios = [];
-  players.forEach(function (box) {
+  players.forEach(function (box, index) {
     var audio = box.querySelector('audio');
     var btn = box.querySelector('[data-play]');
     var track = box.querySelector('.player__track');
@@ -156,10 +156,31 @@
       total.textContent = fmt(d);
       seek.setAttribute('aria-valuetext', fmt(c) + ' of ' + fmt(d));
     }
+    // The small Listen tile(s) beside the cover thumbnails play the same excerpt.
+    var tiles = Array.prototype.slice.call(document.querySelectorAll('[data-listen="' + index + '"]'));
+    tiles.forEach(function (tile) {
+      tile.setAttribute('role', 'button');
+      tile.addEventListener('keydown', function (e) { if (e.key === ' ') { e.preventDefault(); tile.click(); } });
+      tile.addEventListener('click', function (e) { e.preventDefault(); btn.click(); });
+    });
+    function paintTiles() {
+      var d = audio.duration, c = audio.currentTime, started = c > 0.05 && !audio.ended;
+      tiles.forEach(function (tile) {
+        tile.style.setProperty('--pct', (isFinite(d) && d > 0 ? (c / d) * 100 : 0) + '%');
+        var label = tile.querySelector('[data-listen-label]');
+        if (!label.hasAttribute('data-name')) label.setAttribute('data-name', label.textContent);
+        label.textContent = started ? fmt(c) : label.getAttribute('data-name');
+      });
+    }
     function state() {
       var playing = !audio.paused && !audio.ended;
       box.classList.toggle('is-playing', playing);
       btn.setAttribute('aria-label', (playing ? 'Pause: ' : 'Play: ') + title);
+      tiles.forEach(function (tile) {
+        tile.classList.toggle('is-playing', playing);
+        tile.setAttribute('aria-label', (playing ? 'Pause excerpt: ' : 'Play excerpt: ') + title);
+      });
+      paintTiles();
     }
     btn.addEventListener('click', function () {
       if (audio.paused) {
@@ -182,8 +203,8 @@
       seek.style.setProperty('--pct', seek.value + '%');
     });
     ['play', 'pause', 'ended'].forEach(function (ev) { audio.addEventListener(ev, state); });
-    ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked'].forEach(function (ev) { audio.addEventListener(ev, paint); });
-    audio.addEventListener('ended', function () { audio.currentTime = 0; paint(); });
+    ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked'].forEach(function (ev) { audio.addEventListener(ev, paint); audio.addEventListener(ev, paintTiles); });
+    audio.addEventListener('ended', function () { audio.currentTime = 0; paint(); paintTiles(); });
     paint();
   });
 })();

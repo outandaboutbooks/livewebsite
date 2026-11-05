@@ -618,3 +618,32 @@ del { color: var(--ink-soft); }
 .site-header__brand { display: inline-flex; align-items: center; gap: 16px; }
 .site-flag { height: 40px; width: auto; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
 @media (max-width: 560px) { .site-flag { height: 30px; } .site-header__brand { gap: 10px; } }
+
+/* Buy buttons on book pages: outline on the page colour, pink on hover. */
+.edition__buy .btn--secondary:hover { background: var(--hot); border-color: var(--hot); color: #fff; }
+
+/* ---------- cover thumbnails row, with Listen tiles for audio excerpts ---------- */
+.cover-thumbs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.cover-thumbs .cover-switch { margin-top: 0; }
+.listen-tile { display: grid; justify-items: center; gap: 4px; width: 64px; font-family: var(--sans); font-size: .85rem; color: var(--ink); text-decoration: none; cursor: pointer; }
+.listen-tile__tile { position: relative; width: 56px; aspect-ratio: 5 / 8; border-radius: 2px; background: var(--hot); display: grid; place-items: center; overflow: hidden; transition: background .15s; }
+.listen-tile:hover .listen-tile__tile { background: #B3185A; }
+.listen-tile:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 4px; border-radius: 4px; }
+.listen-tile__icon { width: 30px; height: 30px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+.listen-tile__icon svg { width: 14px; height: 14px; fill: var(--hot); }
+.listen-tile__pause, .listen-tile.is-playing .listen-tile__play { display: none; }
+.listen-tile.is-playing .listen-tile__pause { display: block; }
+.listen-tile__wave { position: absolute; top: 7px; left: 0; right: 0; display: flex; justify-content: center; align-items: flex-end; gap: 2px; height: 12px; }
+.listen-tile__wave i { width: 3px; border-radius: 2px; background: rgba(255,255,255,.75); }
+.listen-tile__wave i:nth-child(1) { height: 5px; } .listen-tile__wave i:nth-child(2) { height: 9px; } .listen-tile__wave i:nth-child(3) { height: 12px; }
+.listen-tile__wave i:nth-child(4) { height: 7px; } .listen-tile__wave i:nth-child(5) { height: 10px; } .listen-tile__wave i:nth-child(6) { height: 4px; }
+.listen-tile__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(255,255,255,.35); }
+.listen-tile__bar b { display: block; height: 100%; width: var(--pct, 0%); background: #fff; }
+.listen-tile.is-playing .listen-tile__label { font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  .listen-tile.is-playing .listen-tile__wave i { animation: listen-wave 1s ease-in-out infinite alternate; }
+  .listen-tile.is-playing .listen-tile__wave i:nth-child(2n) { animation-delay: -.4s; }
+  .listen-tile.is-playing .listen-tile__wave i:nth-child(3n) { animation-delay: -.7s; }
+}
+@keyframes listen-wave { from { transform: scaleY(.45); } to { transform: scaleY(1); } }
+.listen-tile__wave i { transform-origin: bottom; }

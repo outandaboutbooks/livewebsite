@@ -153,6 +153,8 @@ In Pages CMS **Site settings**, set:
 
 **Add an audio excerpt:** open the book and go to **Audio excerpts**, then click **Add an excerpt**.
 
+Each excerpt also gets a small pink **Listen** tile beside the Front and Back cover thumbnails (Listen 1, Listen 2… when there's more than one), which plays it straight away; it stays in step with the full player further down the page. There's no limit on the number of excerpts, but two or three is best: on a phone, the tiles wrap onto a second row.
+
 1. Give it a title, e.g. "Chapter 1: The hire car", and optionally who it's read by.
 2. Choose the audio file. MP3 plays in every browser. Keep clips to a few minutes and under about 10 MB: exporting spoken word as MP3 at 64 to 96 kbps mono keeps files small without losing quality.
 3. Paste the words of the excerpt into **Read-along text**. It's optional, but recommended so that people who can't listen can still enjoy it.

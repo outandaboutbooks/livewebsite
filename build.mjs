@@ -692,7 +692,7 @@ for (const b of [...BOOKS, ...DRAFT_BOOKS]) {
 
   const buyButtons = (f, primary) => {
     const btns = [];
-    const cls = primary ? 'btn btn--primary' : 'btn btn--secondary';
+    const cls = 'btn btn--secondary'; // all buy buttons look the same: outline, pink on hover
     const amazonBuyable = f.amazon_url && (f.availability === 'available' || f.availability === 'pre_order');
     if (amazonBuyable) btns.push(`<a class="${cls}" href="${esc(f.amazon_url)}" rel="noopener" target="_blank">${f.availability === 'pre_order' ? 'Pre-order' : 'Buy'} ${f.format === 'eBook' ? 'the eBook' : `the ${esc(f.format.toLowerCase())}`} on Amazon<span class="visually-hidden"> (opens in a new tab)</span></a>`);
     if (f.other_url && (f.availability === 'available' || f.availability === 'pre_order')) btns.push(`<a class="btn btn--secondary" href="${esc(f.other_url)}" rel="noopener" target="_blank">${esc(f.other_label || 'Buy elsewhere')}<span class="visually-hidden"> (opens in a new tab)</span></a>`);
@@ -754,10 +754,13 @@ for (const b of [...BOOKS, ...DRAFT_BOOKS]) {
     <p class="crumbs"><a href="/books/">All books</a>${b.series ? ` <span aria-hidden="true">/</span> <a href="/series/${b.seriesSlug}/">${esc(b.series)}</a>` : ''}</p>
     ${b.sample ? '<p class="review-flag" role="note"><strong>Sample listing.</strong> This is not a real book. It shows how a finished book page looks. Delete it in the admin, or switch off "Show sample listings" in Site settings.</p>' : ''}
     <div class="book__grid">
-      <div class="book__cover">${cover(b, { size: 'xl', eager: true })}${b.cover && b.back_cover ? `
+      <div class="book__cover">${cover(b, { size: 'xl', eager: true })}${(b.cover && b.back_cover) || excerpts.length ? `
+        <div class="cover-thumbs">${b.cover && b.back_cover ? `
         <div class="cover-switch" role="group" aria-label="Choose cover view">
           <a class="cover-switch__btn" href="${esc(b.cover)}" data-cover-src="${esc(b.cover)}" data-cover-alt="${esc(b.cover_alt || `Front cover of ${b.title} by ${b.author}`)}" aria-pressed="true"><img src="${esc(b.cover)}" alt="" width="50" height="80" loading="lazy"><span>Front</span></a>
           <a class="cover-switch__btn" href="${esc(b.back_cover)}" data-cover-src="${esc(b.back_cover)}" data-cover-alt="${esc(b.back_cover_alt || `Back cover of ${b.title} by ${b.author}`)}" aria-pressed="false"><img src="${esc(b.back_cover)}" alt="" width="50" height="80" loading="lazy"><span>Back</span></a>
+        </div>` : ''}${excerpts.map((x, i) => `
+          <a class="listen-tile" href="#ex-${i}" data-listen="${i}" aria-label="Play excerpt: ${esc(x.title)}"><span class="listen-tile__tile" aria-hidden="true"><span class="listen-tile__wave"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="listen-tile__icon"><svg class="listen-tile__play" viewBox="0 0 10 10"><path d="M2.5 1.2v7.6L8.8 5z"/></svg><svg class="listen-tile__pause" viewBox="0 0 10 10"><path d="M2 1h2.2v8H2zM5.8 1H8v8H5.8z"/></svg></span><span class="listen-tile__bar"><b></b></span></span><span class="listen-tile__label" data-listen-label>${excerpts.length > 1 ? `Listen ${i + 1}` : 'Listen'}</span></a>`).join('')}
         </div>` : ''}</div>
       <div class="book__main">
         <header class="book__head">
