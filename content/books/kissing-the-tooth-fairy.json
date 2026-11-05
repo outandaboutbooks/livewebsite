@@ -5,9 +5,9 @@
   "author": "Robin hartes",
   "series": "",
   "series_number": null,
-  "cover": "",
+  "cover": "/media/kissing-the-tooth-fairy-front-v2.jpg",
   "cover_alt": "",
-  "back_cover": "",
+  "back_cover": "/media/03-composite-proof.jpg",
   "back_cover_alt": "",
   "short_description": "",
   "synopsis": "",
@@ -16,9 +16,9 @@
   "publication_date": "",
   "page_count": null,
   "status": "coming_soon",
-  "featured": false,
-  "new_release": false,
-  "sample": true,
+  "featured": true,
+  "new_release": true,
+  "sample": false,
   "promotion": {
     "enabled": false,
     "label": "",
@@ -55,5 +55,7 @@
       "other_url": "",
       "other_label": ""
     }
-  ]
+  ],
+  "published": true,
+  "reviews": []
 }

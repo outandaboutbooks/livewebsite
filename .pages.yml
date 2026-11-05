@@ -1,0 +1,379 @@
+# Admin set-up for Pages CMS (https://pagescms.org).
+# This file tells the admin which things you can edit and what each field means.
+# You shouldn't need to change it unless you want new fields.
+
+media:
+  input: content/media
+  output: /media
+
+content:
+  - name: books
+    label: Books
+    type: collection
+    path: content/books
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, author, status, featured]
+      sort: [title]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - { name: published, label: Published on the website, type: boolean, default: true, description: "Untick to take this book off the website. It stays in the admin." }
+      - name: subtitle
+        label: Subtitle
+        type: string
+      - name: slug
+        label: Web address
+        type: string
+        description: "The end of the book's web address, e.g. kilts-castles-and-kissing-my-ex. Leave blank to make one from the title. Don't change it once the book is live, or old links will break."
+      - name: author
+        label: Author
+        type: string
+        required: true
+      - name: series
+        label: Series name
+        type: string
+        description: "Leave blank if the book isn't part of a series."
+      - name: series_number
+        label: Number in series
+        type: number
+      - name: cover
+        label: Front cover
+        type: image
+        description: "A JPG of the front cover in the 5:8 shape of a 5 × 8 inch paperback, so nothing is cropped. Use your Kindle eBook cover (1600 × 2560 pixels), or the front panel of your paperback cover cut at the trim lines without the bleed. Squash it to under 400 KB first. Leave blank to show a placeholder cover."
+      - name: cover_alt
+        label: Cover description (for screen readers)
+        type: string
+        description: "Optional. e.g. 'Cover of Kilts, Castles and Kissing My Ex: two men in kilts outside a castle.' Leave blank to use 'Front cover of [title] by [author]'."
+      - name: back_cover
+        label: Back cover (optional)
+        type: image
+        description: "A JPG of the back cover, the same 5:8 shape: the back panel of your paperback cover cut at the trim lines, without the bleed or spine. When added, visitors can switch between front and back on the book page."
+      - name: back_cover_alt
+        label: Back cover description (for screen readers)
+        type: string
+        description: "Optional. Leave blank to use 'Back cover of [title] by [author]'."
+      - name: short_description
+        label: Short description
+        type: text
+        description: "One or two sentences shown on the book lists and in search results. About 150 characters is ideal."
+      - name: synopsis
+        label: Full description (blurb)
+        type: text
+        description: "Leave a blank line between paragraphs. Use *asterisks* for italics and **double asterisks** for bold."
+      - name: excerpts
+        label: Audio excerpts
+        type: object
+        list: true
+        description: "Optional. Short readings from the book, shown under the blurb with a play button. MP3 works everywhere; keep each clip a few minutes long and under about 10 MB."
+        fields:
+          - { name: title, label: Excerpt title, type: string, description: "e.g. Chapter 1: The hire car" }
+          - { name: narrator, label: Read by, type: string, description: "Optional, e.g. Robin Hartes" }
+          - { name: audio, label: Audio file (MP3), type: file }
+          - { name: transcript, label: Read-along text, type: text, description: "Optional but recommended: the words of the excerpt, for people who can't listen. Leave a blank line between paragraphs." }
+      - name: genres
+        label: Genres
+        type: string
+        list: true
+        description: "e.g. Gay romance, Romantic comedy, Mystery. Each genre gets its own page and filter. Spell them the same way every time."
+      - name: setting
+        label: Setting
+        type: string
+      - name: publication_date
+        label: Publication date
+        type: date
+      - name: page_count
+        label: Number of pages
+        type: number
+      - name: status
+        label: Book status
+        type: select
+        options:
+          values:
+            - { name: published, label: Out now }
+            - { name: coming_soon, label: Coming soon }
+      - name: reviews
+        label: Reader reviews
+        type: object
+        list: true
+        description: "Reviews readers have sent you through the website (they arrive by email). Copy them in word for word. Publish honest ones, positive and negative."
+        fields:
+          - { name: name, label: Reader's name, type: string }
+          - name: rating
+            label: Stars
+            type: select
+            options:
+              values:
+                - { name: "5", label: "5 stars" }
+                - { name: "4", label: "4 stars" }
+                - { name: "3", label: "3 stars" }
+                - { name: "2", label: "2 stars" }
+                - { name: "1", label: "1 star" }
+          - { name: text, label: Review, type: text }
+          - { name: date, label: Date received, type: date }
+          - { name: show_on_home, label: Show on the home page, type: boolean, description: "Up to three reviews ticked here appear in the home page's What readers say band." }
+      - name: promotion
+        label: Promotion
+        type: object
+        description: "A ribbon across the corner of the front cover, and optional deal prices (set them on each edition below)."
+        fields:
+          - { name: enabled, label: Promotion on, type: boolean }
+          - { name: label, label: Ribbon text, type: string, description: "Short is best, about 16 characters, e.g. 99p Kindle deal or Free this week." }
+          - { name: message, label: Message on the book page, type: text, description: "Optional, e.g. Kindle Countdown Deal: 99p for one week only." }
+          - { name: start, label: Start date, type: date, description: "Optional. Leave blank to start straight away." }
+          - { name: end, label: End date, type: date, description: "Optional. The promotion stops showing after this day." }
+      - name: featured
+        label: Feature on the home page
+        type: boolean
+        description: "Featured books take turns in the home page banner (up to six, fading every few seconds) and appear on the New and featured shelf."
+      - name: new_release
+        label: Mark as a new release
+        type: boolean
+        description: "New releases also appear on the home page, and the newest featured one is shown at the top."
+      - name: sample
+        label: Sample listing (not a real book)
+        type: boolean
+        description: "Only for the example listings. Leave unticked for real books."
+      - name: formats
+        label: Formats and buying options
+        type: object
+        list: true
+        description: "Add one entry for each edition: paperback, hardback, eBook."
+        fields:
+          - name: format
+            label: Format
+            type: select
+            options:
+              values: [Paperback, Hardback, eBook, Audiobook]
+          - name: price
+            label: Price (£)
+            type: number
+            description: "e.g. 9.99. Leave blank if not yet decided."
+          - name: deal_price
+            label: Deal price (£)
+            type: number
+            description: "Optional. Shown, with the normal price crossed out, only while the book's promotion is on. Make sure it matches the price on Amazon."
+          - name: isbn
+            label: ISBN
+            type: string
+            description: "The ISBN printed on this edition (from KDP or your own). Leave blank for Kindle eBooks, which don't need one."
+          - name: availability
+            label: Availability
+            type: select
+            options:
+              values:
+                - { name: available, label: Available }
+                - { name: pre_order, label: Pre-order }
+                - { name: coming_soon, label: Coming soon }
+                - { name: out_of_stock, label: Out of stock }
+          - name: amazon_url
+            label: Amazon link
+            type: string
+            description: "Paste the full Amazon product page address, e.g. https://www.amazon.co.uk/dp/XXXXXXXXXX"
+          - name: other_url
+            label: Other shop link (optional)
+            type: string
+            description: "e.g. Kobo, Apple Books, Waterstones, or the book's page in your own Shopify shop if you add one later."
+          - name: other_label
+            label: Other shop button text
+            type: string
+            description: "e.g. Buy on Kobo"
+
+  - name: merch
+    label: Shop items
+    type: collection
+    path: content/merch
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: name
+      fields: [name, price, availability]
+    fields:
+      - { name: name, label: Product name, type: string, required: true }
+      - { name: published, label: Published on the website, type: boolean, default: true, description: "Untick to take this item off the website. It stays in the admin." }
+      - { name: slug, label: Web address, type: string, description: "Leave blank to make one from the name." }
+      - { name: image, label: Product photo, type: image, description: "A square photo works best, e.g. 1200 × 1200 pixels, under 400 KB." }
+      - { name: image_alt, label: Photo description (for screen readers), type: string }
+      - { name: description, label: Description, type: text }
+      - { name: options, label: Sizes or options, type: string, description: "Optional, e.g. Sizes S to XXL, or Pack of three." }
+      - { name: price, label: Price (£), type: number }
+      - name: availability
+        label: Availability
+        type: select
+        options:
+          values:
+            - { name: available, label: Available }
+            - { name: coming_soon, label: Coming soon }
+            - { name: sold_out, label: Sold out }
+      - { name: buy_url, label: Buy link, type: string, description: "Where the Buy button goes, e.g. the product's Shopify page. The button only shows when this is filled in and the item is Available." }
+      - { name: buy_label, label: Buy button text, type: string, description: "Optional. Defaults to Buy now." }
+      - { name: sample, label: Sample listing (not a real product), type: boolean }
+
+  - name: home
+    label: Home page text
+    type: file
+    path: content/home.json
+    format: json
+    fields:
+      - { name: hero_heading, label: Main heading, type: string, description: "Each sentence goes on its own line." }
+      - { name: hero_strapline, label: Strapline, type: string, description: "The yellow line under the main heading. Leave blank to hide it." }
+      - { name: hero_text, label: Introduction, type: text }
+      - { name: hero_button, label: Button text, type: string }
+      - { name: books_heading, label: Books section heading, type: string }
+      - { name: books_text, label: Books section text, type: text }
+      - { name: about_heading, label: About section heading, type: string }
+      - { name: about_text, label: About section text, type: text }
+      - { name: about_link, label: About link text, type: string }
+      - { name: ticker, label: Words in the moving strip, type: string, list: true, description: "Short phrases shown in the yellow strip under the opening section. Leave empty to hide the strip." }
+
+  - name: pages
+    label: Pages
+    type: collection
+    path: content/pages
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, layout, needs_review]
+    fields:
+      - { name: title, label: Page title, type: string, required: true }
+      - { name: published, label: Published on the website, type: boolean, default: true, description: "Untick to take this page off the website. It stays in the admin." }
+      - { name: slug, label: Web address, type: string, description: "The end of the page's address, e.g. events for /events/. Use lower-case letters and dashes. Don't change it for existing pages (about, faq, contact, privacy, cookies, terms, delivery-returns)." }
+      - name: layout
+        label: Layout
+        type: select
+        options:
+          values:
+            - { name: text, label: Text page }
+            - { name: image, label: Image and text }
+            - { name: cards, label: Cards }
+            - { name: gallery, label: Gallery }
+            - { name: feature, label: Feature }
+      - name: tone
+        label: Title band colour
+        type: string
+        description: "Type one of: red, orange, sun (yellow), green, cobalt (blue), navy, purple or hot (pink), or your own colour as a #code such as #3a7bd5. Not used by the Feature layout. The editor on your computer has swatches and a colour picker."
+      - { name: intro, label: Introduction, type: text }
+      - { name: needs_review, label: Needs legal review, type: boolean, description: "Shows a 'needs legal review' notice on the page. Untick once the page has been checked." }
+      - { name: body, label: Page content, type: text, description: "## for a heading, ### for a smaller heading, a blank line between paragraphs, - at the start of a line for a bullet, [link text](/faq/) for a link. Anything in [square brackets] is highlighted as a placeholder. {{contact_email}}, {{trading_name}}, {{business_address}} and {{reply_time}} are filled in from Site settings." }
+      - { name: image, label: Picture (Image and text, Feature), type: image }
+      - { name: image_alt, label: Picture description (for screen readers), type: string }
+      - { name: caption, label: Caption (Image and text), type: string }
+      - { name: button_text, label: Button text (Image and text, Feature), type: string }
+      - { name: button_url, label: Button link, type: string, description: "A page on this site, e.g. /books/, or a full address starting https://" }
+      - name: cards
+        label: Cards (Cards layout, up to six)
+        type: object
+        list: true
+        fields:
+          - { name: heading, label: Heading, type: string }
+          - { name: image, label: Picture, type: image }
+          - { name: image_alt, label: Picture description, type: string }
+          - { name: text, label: Text, type: text }
+          - { name: button_text, label: Button text, type: string }
+          - { name: button_url, label: Button link, type: string }
+      - name: gallery
+        label: Pictures (Gallery layout)
+        type: object
+        list: true
+        fields:
+          - { name: image, label: Picture, type: image }
+          - { name: caption, label: Caption, type: string }
+          - { name: image_alt, label: Picture description, type: string }
+      - { name: cta_heading, label: Closing heading (Feature), type: string, description: "Leave blank to hide the closing strip." }
+      - { name: cta_button_text, label: Closing button text (Feature), type: string }
+      - { name: cta_button_url, label: Closing button link (Feature), type: string }
+      - { name: parent, label: Parent page, type: string, description: "Optional. To put this page under another page, type that page's web address ending, e.g. events, about, faq or contact. It then appears in that page's drop-down menu at /events/this-page/. One level only." }
+      - { name: show_in_menu, label: Show in the menu, type: boolean, description: "For pages you add. Top-level pages go in the menu at the top; pages with a parent go in their parent's drop-down." }
+      - { name: menu_label, label: Menu name (optional), type: string, description: "A shorter name for the menu and footer, e.g. Events." }
+      - { name: show_in_footer, label: Show in the footer, type: boolean }
+
+  - name: settings
+    label: Site settings
+    type: file
+    path: content/settings.json
+    format: json
+    fields:
+      - { name: site_name, label: Site name, type: string }
+      - { name: tagline, label: Tagline, type: string }
+      - { name: strapline, label: Footer strapline, type: string }
+      - { name: site_url, label: Website address, type: string, description: "e.g. https://outandaboutbooks.co.uk (used for search engines and sharing links)." }
+      - { name: meta_description, label: Search engine description, type: text }
+      - { name: contact_email, label: Contact email address, type: string, description: "Shown on the site, and where contact form messages and newsletter sign-ups are sent." }
+      - { name: form_sender_email, label: Website sender address, type: string, description: "Optional. The address form emails come from, e.g. website@yourdomain.co.uk. Create it as a mailbox or alias with your host first. Leave blank to use website@ plus your web address." }
+      - { name: trading_name, label: Legal or trading name, type: string, description: "Your name if you're a sole trader, or your company's registered name." }
+      - { name: business_address, label: Business postal address, type: text, description: "UK law requires online sellers to show a geographic address. A business address or mail-forwarding address is fine." }
+      - { name: company_number, label: Company number, type: string, description: "Only if you're a limited company." }
+      - { name: vat_number, label: VAT number, type: string, description: "Only if you're VAT registered." }
+      - name: social_links
+        label: Social media links
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Name, type: string }
+          - { name: url, label: Link, type: string }
+      - { name: newsletter_enabled, label: Show newsletter sign-up, type: boolean }
+      - { name: newsletter_heading, label: Newsletter heading, type: string }
+      - { name: newsletter_text, label: Newsletter text, type: text }
+      - { name: show_shop, label: Show the shop, type: boolean, description: "Tick to add a Shop page and menu link for merchandise. Leave unticked until you have stock." }
+      - name: heading_font
+        label: Headings font
+        type: select
+        description: "Also used for the menu and buttons. Poppins if left blank. The editor on your computer shows a sample of each font."
+        options:
+          values:
+            - { name: poppins, label: Poppins (standard) }
+            - { name: bricolage-grotesque, label: Bricolage Grotesque }
+            - { name: outfit, label: Outfit }
+            - { name: work-sans, label: Work Sans }
+            - { name: instrument-sans, label: Instrument Sans }
+            - { name: lora, label: Lora }
+      - name: body_font
+        label: Paragraph font
+        type: select
+        description: "Lora if left blank."
+        options:
+          values:
+            - { name: lora, label: Lora (standard) }
+            - { name: crimson-pro, label: Crimson Pro }
+            - { name: ibm-plex-serif, label: IBM Plex Serif }
+            - { name: inter, label: Inter }
+            - { name: work-sans, label: Work Sans }
+            - { name: instrument-sans, label: Instrument Sans }
+      - name: heading_size
+        label: Heading size
+        type: select
+        options:
+          values:
+            - { name: smaller, label: Smaller }
+            - { name: standard, label: Standard }
+            - { name: larger, label: Larger }
+      - name: text_size
+        label: Paragraph text size
+        type: select
+        options:
+          values:
+            - { name: smaller, label: Smaller }
+            - { name: standard, label: Standard }
+            - { name: larger, label: Larger }
+      - { name: heading_colour, label: Heading colour, type: string, description: "For headings on the cream background. Leave blank for charcoal, or type red, orange, sun (yellow), green, cobalt (blue), navy, purple, hot (pink) or a #code such as #3a7bd5." }
+      - name: books_tone
+        label: Our books title band colour
+        type: string
+        description: "Type one of: red, orange, sun (yellow), green, cobalt (blue), navy, purple or hot (pink), or your own colour as a #code such as #3a7bd5. Also used for the genre and series pages. Pink if left blank."
+      - name: shop_tone
+        label: Shop title band colour
+        type: string
+        description: "Type one of: red, orange, sun (yellow), green, cobalt (blue), navy, purple or hot (pink), or your own colour as a #code such as #3a7bd5. Yellow if left blank."
+      - { name: shop_heading, label: Shop page heading, type: string }
+      - { name: shop_intro, label: Shop page introduction, type: text }
+      - { name: book_order, label: Book order, type: string, list: true, description: "Optional. The order of books on the Our books page (as Our pick) and the home page: one book per line, using each book's file name without .json, e.g. kilts-castles-and-kissing-my-ex. Easier in the editor on your computer (Book order)." }
+      - { name: menu_order, label: Menu order, type: string, list: true, description: "Optional. The order of the top menu, one item per line, using web address endings: books, about, faq, contact, and the endings of pages you've added (e.g. events). Anything not listed keeps its usual place. Easier in the editor on your computer (Menu order)." }
+      - { name: show_sample_listings, label: Show sample listings, type: boolean, description: "Untick before launch to hide the example books." }
+      - { name: reply_time, label: Reply time for enquiries, type: string, description: "e.g. within 2 working days" }
+      - { name: amazon_note, label: Note under Amazon buttons, type: text }
+      - { name: analytics_plausible_domain, label: Plausible analytics domain, type: string, description: "Optional, paid service. Leave blank for no analytics. If set, e.g. outandaboutbooks.co.uk, Plausible's cookie-free visitor stats are switched on." }
