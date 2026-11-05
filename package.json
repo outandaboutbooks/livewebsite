@@ -1,0 +1,12 @@
+{
+  "name": "out-and-about-books",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website for Out and About Books, an independent LGBTQ+ fiction imprint.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node build.mjs && npx --yes serve _site"
+  },
+  "engines": { "node": ">=20" }
+}

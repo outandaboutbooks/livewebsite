@@ -1,0 +1,16 @@
+{
+  "_about": "Fonts offered in Site settings > Text styles. Only the fonts chosen there are copied to the live website. All are self-hosted WOFF files, which every current browser supports.",
+  "heading": ["poppins", "bricolage-grotesque", "outfit", "work-sans", "instrument-sans", "lora"],
+  "body": ["lora", "crimson-pro", "ibm-plex-serif", "inter", "work-sans", "instrument-sans"],
+  "fonts": {
+    "poppins": { "name": "Poppins", "style": "Rounded, friendly, bold (the current headings)", "fallback": "sans", "builtIn": true },
+    "lora": { "name": "Lora", "style": "Warm, bookish serif (the current paragraphs)", "fallback": "serif", "builtIn": true },
+    "bricolage-grotesque": { "name": "Bricolage Grotesque", "style": "Characterful, slightly quirky", "fallback": "sans", "faces": [["bricolage-grotesque-regular.woff", 400, "normal"], ["bricolage-grotesque-bold.woff", 700, "normal"]] },
+    "outfit": { "name": "Outfit", "style": "Clean, geometric, modern", "fallback": "sans", "faces": [["outfit-regular.woff", 400, "normal"], ["outfit-bold.woff", 700, "normal"]] },
+    "work-sans": { "name": "Work Sans", "style": "Plain-spoken and very readable", "fallback": "sans", "faces": [["work-sans-regular.woff", 400, "normal"], ["work-sans-italic.woff", 400, "italic"], ["work-sans-bold.woff", 700, "normal"], ["work-sans-bold-italic.woff", 700, "italic"]] },
+    "instrument-sans": { "name": "Instrument Sans", "style": "Crisp and contemporary", "fallback": "sans", "faces": [["instrument-sans-regular.woff", 400, "normal"], ["instrument-sans-italic.woff", 400, "italic"], ["instrument-sans-bold.woff", 700, "normal"], ["instrument-sans-bold-italic.woff", 700, "italic"]] },
+    "crimson-pro": { "name": "Crimson Pro", "style": "Classic book typeface, like a printed novel", "fallback": "serif", "sizeAdjust": "112%", "faces": [["crimson-pro-regular.woff", 400, "normal"], ["crimson-pro-italic.woff", 400, "italic"], ["crimson-pro-bold.woff", 700, "normal"]] },
+    "ibm-plex-serif": { "name": "IBM Plex Serif", "style": "Sturdy, modern serif", "fallback": "serif", "faces": [["ibm-plex-serif-regular.woff", 400, "normal"], ["ibm-plex-serif-italic.woff", 400, "italic"], ["ibm-plex-serif-bold.woff", 700, "normal"], ["ibm-plex-serif-bold-italic.woff", 700, "italic"]] },
+    "inter": { "name": "Inter", "style": "Neutral and very clear on screens", "fallback": "sans", "faces": [["inter-regular.woff", 400, "normal"], ["inter-italic.woff", 400, "italic"], ["inter-semibold.woff", 600, "normal"], ["inter-bold.woff", 700, "normal"], ["inter-bold-italic.woff", 700, "italic"]] }
+  }
+}
