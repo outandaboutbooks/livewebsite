@@ -225,12 +225,12 @@ const FOOTER_PAGES = Object.entries(PAGES).filter(([slug, p]) => !BUILT_IN_PAGES
 
 const NAV_ITEMS = [
   ['books', ['/books/', 'Our books']],
-  ...(NEWS.length || DRAFT_NEWS.length ? [['news', ['/news/', esc(String(NEWS_PAGE.menu_label || NEWS_PAGE.title || 'News').trim())]]] : []),
+  ...((NEWS.length || DRAFT_NEWS.length) && NEWS_PAGE.show_in_menu !== false ? [['news', ['/news/', esc(String(NEWS_PAGE.menu_label || NEWS_PAGE.title || 'News').trim())]]] : []),
   ...(SHOP_ON ? [['shop', ['/shop/', 'Shop']]] : []),
-  ...(PAGES.about ? [['about', ['/about/', 'About us', childrenOf('about').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
+  ...(PAGES.about && PAGES.about.show_in_menu !== false ? [['about', ['/about/', esc(PAGES.about.menu_label ? navLabel(PAGES.about) : 'About us'), childrenOf('about').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
   ...MENU_PAGES.map(([slug, p]) => [slug, [pageUrl(slug), esc(navLabel(p)), childrenOf(slug).map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]),
-  ...(PAGES.faq ? [['faq', ['/faq/', 'Questions', childrenOf('faq').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
-  ...(PAGES.contact ? [['contact', ['/contact/', 'Contact', childrenOf('contact').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
+  ...(PAGES.faq && PAGES.faq.show_in_menu !== false ? [['faq', ['/faq/', esc(PAGES.faq.menu_label ? navLabel(PAGES.faq) : 'Questions'), childrenOf('faq').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
+  ...(PAGES.contact && PAGES.contact.show_in_menu !== false ? [['contact', ['/contact/', esc(PAGES.contact.menu_label ? navLabel(PAGES.contact) : 'Contact'), childrenOf('contact').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
 ];
 // Items in the saved order first; anything new keeps its usual place next to the item before it.
 function orderNav(items, saved) {
@@ -251,7 +251,7 @@ const analytics = S.analytics_plausible_domain
   ? `<script defer data-domain="${esc(S.analytics_plausible_domain)}" src="https://plausible.io/js/script.js"></script>`
   : '';
 
-const footLink = (slug, label) => PAGES[slug] ? `<li><a href="/${slug}/">${label}</a></li>` : '';
+const footLink = (slug, label) => PAGES[slug] && PAGES[slug].show_in_footer !== false ? `<li><a href="/${slug}/">${label}</a></li>` : '';
 const draftBanner = `<p class="draft-banner" role="note"><strong>Draft.</strong> This isn't published, so it isn't on the live website. You're seeing it because this is the editor's preview.</p>`;
 
 function layout({ title, description, body, current = '', og = {}, jsonld = null, scripts = [], noindex = false, canonical, draft = false }) {
@@ -335,19 +335,18 @@ ${INSTAGRAM ? `<section class="ig-band" aria-labelledby="ig-band-h">
         ${GENRES.slice(0, 4).map((g) => `<li><a href="/books/genre/${slugify(g)}/">${esc(g)}</a></li>`).join('')}
       </ul>
     </nav>
-    <nav aria-label="Help">
+    ${((help) => help ? `<nav aria-label="Help">
       <h2>Help</h2>
       <ul>
-        ${footLink('faq', 'Questions')}${footLink('delivery-returns', 'Delivery and returns')}${footLink('contact', 'Contact us')}${footLink('about', 'About us')}
-        ${FOOTER_PAGES.map(([slug, p]) => `<li><a href="${pageUrl(slug)}">${esc(navLabel(p))}</a></li>`).join('')}
+        ${help}
       </ul>
-    </nav>
-    <nav aria-label="Policies">
+    </nav>` : '')(footLink('faq', 'Questions') + footLink('delivery-returns', 'Delivery and returns') + footLink('contact', 'Contact us') + footLink('about', 'About us') + FOOTER_PAGES.map(([slug, p]) => `<li><a href="${pageUrl(slug)}">${esc(navLabel(p))}</a></li>`).join(''))}
+    ${((pol) => pol ? `<nav aria-label="Policies">
       <h2>Policies</h2>
       <ul>
-        ${footLink('terms', 'Terms and conditions')}${footLink('privacy', 'Privacy policy')}${footLink('cookies', 'Cookies')}
+        ${pol}
       </ul>
-    </nav>
+    </nav>` : '')(footLink('terms', 'Terms and conditions') + footLink('privacy', 'Privacy policy') + footLink('cookies', 'Cookies'))}
     <div class="site-footer__contact">
       <h2>Get in touch</h2>
       <p>${EMAIL_RE.test(S.contact_email) ? `<a href="mailto:${esc(S.contact_email)}">${esc(S.contact_email)}</a>` : t(S.contact_email)}</p>

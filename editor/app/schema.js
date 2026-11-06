@@ -162,7 +162,6 @@ window.SCHEMA = (function () {
           { name: 'parent', label: 'Parent page (put this page under another)', type: 'pageparent', newOnly: true, help: 'Any page in the top menu can have sub-pages: About us, Questions, Contact or a page you\'ve added. e.g. put Book launch under Events, or Meet the author under About us. It then appears in that page\'s drop-down menu, and its address becomes /events/book-launch/. One level only, so a sub-page can\'t have sub-pages of its own.' },
           { name: 'layout', label: 'Layout', type: 'select', rerender: true, small: true, notFile: ['news.json'], options: [['text', 'Text page'], ['image', 'Image and text'], ['cards', 'Cards'], ['gallery', 'Gallery'], ['feature', 'Feature']], help: 'Changing the layout keeps everything you have typed.' },
           { name: 'tone', label: 'Title band colour', type: 'colour', notFor: ['feature'], options: TONE_OPTIONS },
-          { name: 'menu_label', label: 'Menu name (optional)', type: 'string', small: true, onlyFile: ['news.json'], help: 'A shorter name for the menu, e.g. News. The News page is in the menu once there is a post.' },
           { name: 'intro', label: 'Introduction', type: 'text', rich: 'inline', rows: 3, help: 'Shown under the title. On the Feature layout, this is the line under the big heading.' },
           { name: 'needs_review', label: 'Needs legal review', type: 'bool', builtInOnly: true, notFile: ['news.json'], help: "Shows a 'needs legal review' notice on the page. Untick once the page has been checked." },
         ] },
@@ -207,6 +206,11 @@ window.SCHEMA = (function () {
           { name: 'menu_label', label: 'Menu name (optional)', type: 'string', small: true, help: 'A shorter name for the menu and footer, e.g. Events.' },
           { name: 'show_in_footer', label: 'Show in the footer', type: 'bool' },
           { name: 'slug', label: 'Web address', type: 'string', readonly: true, help: 'Made from the title when the page was added.' },
+        ] },
+        { title: 'Where it appears', builtInGroup: true, fields: [
+          { name: 'show_in_menu', label: 'Show in the menu', type: 'bool', default: true, onlyFile: ['about.json', 'faq.json', 'contact.json', 'news.json'], help: 'Untick to take this page out of the menu at the top. The page still works. (The News page only appears in the menu once there is a post.)' },
+          { name: 'menu_label', label: 'Menu name (optional)', type: 'string', small: true, onlyFile: ['about.json', 'faq.json', 'contact.json', 'news.json'], help: 'A shorter or different name for the menu, e.g. FAQs.' },
+          { name: 'show_in_footer', label: 'Show in the footer', type: 'bool', default: true, notFile: ['news.json'], help: 'Untick to take this page\'s link out of the footer. The page still works. To take a page off the website completely, untick Published at the top instead. Keep the Privacy policy in the footer: visitors should always be able to find it.' },
         ] },
         { title: 'Web address', builtInGroup: true, fields: [
           { name: 'slug', label: 'Web address', type: 'string', readonly: true, help: 'Fixed for the built-in pages.' },

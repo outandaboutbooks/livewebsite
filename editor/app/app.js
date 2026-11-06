@@ -592,21 +592,22 @@
   function menuView() {
     setNav('menu'); state.previewPath = '/';
     main.innerHTML = '';
-    main.append(h('div', { class: 'head' }, [h('h1', { text: 'Menu order' }), h('p', { class: 'intro', text: 'Drag items by their handle (or use Up and Down) to change the order of the menu at the top of every page, and of the pages inside each drop-down. Only pages ticked "Show in the menu" are listed.' })]));
+    main.append(h('div', { class: 'head' }, [h('h1', { text: 'Menu order' }), h('p', { class: 'intro', text: 'Drag items by their handle (or use Up and Down) to change the order of the menu at the top of every page, and of the pages inside each drop-down. Only pages ticked "Show in the menu" (in each page\'s settings, under Pages) are listed.' })]));
     var box = h('div', {}, [h('p', { class: 'loading', text: 'Loading…' })]);
     main.append(box);
     var hasNews = false;
     Promise.all([api('GET', 'list/pages'), api('GET', 'file/settings'), api('GET', 'list/news')]).then(function (res) {
       var pages = res[0], settings = res[1];
       hasNews = res[2].length > 0;
-      return Promise.all(pages.map(function (it) { return api('GET', 'item/pages/' + it.file).then(function (d) { return { slug: it.file.replace(/\.json$/, ''), title: d.menu_label || d.title, parent: d.parent || '', menu: !!d.show_in_menu, builtIn: S.pages.builtIn.indexOf(it.file) >= 0 }; }); }))
+      return Promise.all(pages.map(function (it) { return api('GET', 'item/pages/' + it.file).then(function (d) { return { slug: it.file.replace(/\.json$/, ''), title: d.menu_label || d.title, parent: d.parent || '', menu: !!d.show_in_menu, menuOn: d.show_in_menu !== false && d.published !== false, label: d.menu_label || '', builtIn: S.pages.builtIn.indexOf(it.file) >= 0 }; }); }))
         .then(function (all) { draw(all, settings); });
     }).catch(function (e) { box.innerHTML = ''; box.append(h('p', { class: 'note note--bad', text: e.message })); });
 
     function draw(all, settings) {
-      var items = [['books', 'Our books']].concat(hasNews ? [['news', 'News']] : [], settings.show_shop ? [['shop', 'Shop']] : [], [['about', 'About us']],
+      var bi = function (slug, name) { var p = all.find(function (x) { return x.slug === slug; }); return p && p.menuOn ? [[slug, p.label || name]] : []; };
+      var items = [['books', 'Our books']].concat(hasNews ? bi('news', 'News') : [], settings.show_shop ? [['shop', 'Shop']] : [], bi('about', 'About us'),
         all.filter(function (p) { return !p.builtIn && !p.parent && p.menu; }).map(function (p) { return [p.slug, p.title]; }),
-        [['faq', 'Questions'], ['contact', 'Contact']]);
+        bi('faq', 'Questions'), bi('contact', 'Contact'));
       var keys = items.map(function (x) { return x[0]; });
       var order = (settings.menu_order || []).filter(function (k) { return keys.indexOf(k) >= 0; });
       keys.forEach(function (k, i) { if (order.indexOf(k) >= 0) return; var before = keys.slice(0, i).reverse().find(function (x) { return order.indexOf(x) >= 0; }); order.splice(before ? order.indexOf(before) + 1 : 0, 0, k); });

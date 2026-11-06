@@ -1,9 +1,9 @@
 {
   "title": "Contact us",
   "slug": "contact",
-  "intro": "Questions about a book, or working with us? Send us a message and we'll reply by email.",
+  "intro": "",
   "needs_review": false,
-  "body": "For questions about an order, please contact the shop you bought from. Amazon handles delivery and returns for books bought there.\n\nYou can also email us at {{contact_email}}.",
+  "body": "For questions about an order, please contact the shop you bought from.\n\nAmazon handles delivery and returns for books bought there.\n\nYou can also email us at {{contact_email}}.",
   "published": true,
   "layout": "text",
   "tone": "navy"
