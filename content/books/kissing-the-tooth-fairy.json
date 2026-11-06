@@ -49,6 +49,16 @@
       "amazon_url": "https://www.amazon.co.uk/dp/B0HQ8BWZ8D",
       "other_url": "",
       "other_label": ""
+    },
+    {
+      "format": "Paperback",
+      "price": 9.99,
+      "isbn": "",
+      "availability": "available",
+      "deal_price": null,
+      "amazon_url": "https://www.amazon.co.uk/dp/B0HQCT7TB5?th=1",
+      "other_url": "",
+      "other_label": ""
     }
   ],
   "published": true,
