@@ -6,5 +6,7 @@
   "body": "For questions about an order, please contact the shop you bought from.\n\nAmazon handles delivery and returns for books bought there.\n\nYou can also email us at {{contact_email}}.",
   "published": true,
   "layout": "text",
-  "tone": "navy"
+  "tone": "navy",
+  "show_in_menu": true,
+  "show_in_footer": true
 }
