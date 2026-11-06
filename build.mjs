@@ -1093,6 +1093,43 @@ const relativise = (html, urlPath) => {
     return `${attr}="${pre}${target}${rest}"`;
   });
 };
+// ---------- Coming soon page (Site settings > Coming soon page) ----------
+// When switched on, the live website shows only a holding page, at every address, and asks search engines
+// not to list it. The editor's Preview still shows the full website, plus the holding page at /coming-soon/.
+const HOLDING = S.holding_page === true;
+function holdingPage() {
+  const lines = String(HOME.hero_heading || 'Out. About. Unapologetic.').split(/(?<=\.)\s+/);
+  const msg = S.holding_text || `Our new website is on its way.${INSTAGRAM ? ' In the meantime, follow us on Instagram for news, cover reveals and new releases.' : ''}`;
+  return `<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(S.site_name)}: coming soon</title>
+<meta name="description" content="${esc(stripMd(msg))}">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/theme.css">
+</head>
+<body class="holding-body">
+<main class="holding">
+  <div class="holding__inner">
+    <p class="holding__brand"><img class="holding__logo" src="/assets/img/brand/logo-stacked-books-white.svg" alt="${esc(S.site_name)}" width="110" height="100"><img class="holding__flag" src="/assets/img/brand/pride-flag.svg" alt="" width="63" height="40"></p>
+    <h1 class="holding__title">${lines.map((l) => `<span>${esc(l)}</span>`).join(' ')}</h1>
+    ${HOME.hero_strapline ? `<p class="holding__strap">${esc(HOME.hero_strapline)}</p>` : ''}
+    <p class="holding__soon">Coming soon</p>
+    <p class="holding__msg">${ti(msg)}</p>
+    ${INSTAGRAM ? `<p><a class="holding__ig" href="${esc(INSTAGRAM.url)}" rel="noopener">${igIcon(30)}<span>Follow ${IG_HANDLE ? '@' + esc(IG_HANDLE) : 'us'}<span class="visually-hidden"> on Instagram</span></span></a></p>` : ''}
+  </div>
+</main>
+</body>
+</html>
+`;
+}
+if (DRAFTS) pages['/coming-soon/'] = holdingPage();
+else if (HOLDING) { for (const k of Object.keys(pages)) delete pages[k]; pages['/'] = holdingPage(); pages['/404.html'] = holdingPage(); }
+
 for (const [urlPath, html] of Object.entries(pages)) {
   const file = urlPath.endsWith('/') ? path.join(OUT, urlPath, 'index.html') : path.join(OUT, urlPath);
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -1117,12 +1154,12 @@ fs.copyFileSync(path.join(ROOT, 'src/htaccess'), path.join(OUT, '.htaccess'));
 
 // sitemap + robots
 const base = S.site_url.replace(/\/$/, '');
-const indexable = Object.keys(pages).filter((u) => !DRAFT_URLS.has(u) && !['/404.html', '/contact/thanks/', '/newsletter/thanks/', '/review/thanks/', '/admin/'].includes(u) && !BOOKS.find((b) => b.sample && b.url === u));
+const indexable = Object.keys(pages).filter((u) => !(HOLDING && !DRAFTS) && !DRAFT_URLS.has(u) && u !== '/coming-soon/' && !['/404.html', '/contact/thanks/', '/newsletter/thanks/', '/review/thanks/', '/admin/'].includes(u) && !BOOKS.find((b) => b.sample && b.url === u));
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${indexable.map((u) => `  <url><loc>${base}${u}</loc></url>`).join('\n')}
 </urlset>
 `);
-fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${base}/sitemap.xml\n`);
+fs.writeFileSync(path.join(OUT, 'robots.txt'), HOLDING && !DRAFTS ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${base}/sitemap.xml\n`);
 
-console.log(`Built ${Object.keys(pages).length} pages, ${BOOKS.length} books.${FORM_TO || FORMS_OFF ? '' : ' Note: the contact form has no address to send to until you add your contact email in Site settings.'}`);
+console.log(`${HOLDING && !DRAFTS ? 'COMING SOON PAGE IS ON: the website shows only the holding page. ' : ''}Built ${Object.keys(pages).length} pages, ${BOOKS.length} books.${FORM_TO || FORMS_OFF ? '' : ' Note: the contact form has no address to send to until you add your contact email in Site settings.'}`);

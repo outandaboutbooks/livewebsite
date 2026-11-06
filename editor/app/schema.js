@@ -256,6 +256,10 @@ window.SCHEMA = (function () {
             newItem: function () { return { label: '', url: '' }; },
             fields: [{ name: 'label', label: 'Name', type: 'string', small: true }, { name: 'url', label: 'Link', type: 'url' }] },
         ] },
+        { title: 'Coming soon page', fields: [
+          { name: 'holding_page', label: 'Show only a "Coming soon" page on the live website', type: 'bool', help: 'Use this while the site isn\'t ready for visitors. Every address on the live website shows a holding page with your logo, slogan and Instagram link, and search engines are asked not to list it. Preview website still shows the full site, and the holding page at /coming-soon/. Untick to go live.' },
+          { name: 'holding_text', label: 'Message on the holding page (optional)', type: 'text', rich: 'inline', rows: 2, help: 'Leave blank for: Our new website is on its way. In the meantime, follow us on Instagram for news, cover reveals and new releases.' },
+        ] },
         { title: 'Text styles', fields: [
           { name: 'heading_font', label: 'Headings font', type: 'font', list: 'heading', default: 'poppins', help: 'Also used for the menu and buttons.' },
           { name: 'body_font', label: 'Paragraph font', type: 'font', list: 'body', default: 'lora' },

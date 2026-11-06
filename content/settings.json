@@ -55,5 +55,6 @@
     "faq",
     "contact"
   ],
-  "submenu_order": {}
+  "submenu_order": {},
+  "holding_page": true
 }

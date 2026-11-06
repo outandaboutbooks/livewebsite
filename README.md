@@ -304,6 +304,10 @@ Shopify can also embed its own "Buy" buttons into pages. A developer (or Claude)
 - `editor/server.mjs` is the offline editor: a dependency-free Node server bound to 127.0.0.1 (editor on port 3001, built-site preview on 3000). Its form fields are defined in `editor/app/schema.js`; keep them in step with `.pages.yml`. `Edit website (Mac).command` and `Edit website (Windows).bat` start it.
 - `Preview website (Mac).command` and `Preview website (Windows).bat` run `node build.mjs` then `npx -y serve _site -l 3000` and open the browser. Keep them working whenever the build changes; the owner relies on them for previews.
 
+## Coming soon page
+
+While the site isn't ready for visitors, go to **Site settings → Coming soon page** and tick **Show only a "Coming soon" page on the live website**, then save and publish (commit and push). Every address on the live site then shows a pink holding page with your logo, slogan, an optional message and your Instagram link, and search engines are asked not to list it. **Preview website** on your PC still shows the full site as normal (the holding page itself is at /coming-soon/ in the preview). When you're ready to go live, untick it and publish again.
+
 ## Hosting on GitHub Pages
 
 `.github/workflows/github-pages.yml` builds and publishes the site on GitHub Pages every time the repository changes (including saves in Pages CMS), and once a day for promotions. Turn it on once: **Settings → Pages → Source → GitHub Actions**. The address shows at the top of that page after the first run. It works at `https://yourname.github.io/repository-name/` and on your own domain once you add it under **Settings → Pages → Custom domain** (then tick **Enforce HTTPS**).
@@ -311,5 +315,7 @@ Shopify can also embed its own "Buy" buttons into pages. A developer (or Claude)
 GitHub Pages can't run send.php, so on GitHub Pages the newsletter and review forms are hidden and the contact page shows a short note (with your Instagram link) instead of the form. On a free GitHub account the repository must be public, so anyone can read the content folder, including unpublished pages.
 
 **Publishing changes with GitHub Desktop:** your website folder on your PC is the `livewebsite` folder that GitHub Desktop cloned. Edit and preview as usual, then in GitHub Desktop type a short summary, click **Commit to main** and then **Push origin**. The live site updates about two minutes later (watch for the green tick in the **Actions** tab). Update packs: extract into the same folder, choose Replace, then commit and push. To undo a published change, right-click it in the **History** tab and choose **Revert**, then push.
+
+**If the site suddenly loses its styling or images** after you change anything under **Settings → Pages** (custom domain, Enforce HTTPS), GitHub has republished an older copy built for the previous address. Go to **Actions → GitHub Pages → Run workflow**, wait for the green tick, then refresh with Ctrl+F5.
 
 If you later move to a host that runs PHP (e.g. IONOS), use `publish.yml` instead and the forms come back automatically.

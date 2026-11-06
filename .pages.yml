@@ -347,6 +347,8 @@ content:
       - { name: newsletter_heading, label: Newsletter heading, type: string }
       - { name: newsletter_text, label: Newsletter text, type: text }
       - { name: show_shop, label: Show the shop, type: boolean, description: "Tick to add a Shop page and menu link for merchandise. Leave unticked until you have stock." }
+      - { name: holding_page, label: Show only a Coming soon page on the live website, type: boolean, default: false, description: "Every address shows a holding page and search engines are asked not to list it. Untick to go live." }
+      - { name: holding_text, label: Message on the coming soon page (optional), type: text }
       - name: heading_font
         label: Headings font
         type: select
