@@ -752,3 +752,7 @@ del { color: var(--ink-soft); }
 .holding__ig:hover { background: var(--sun); }
 .holding__ig img { border-radius: 6px; }
 .holding a:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+
+/* ---------- Book filters: rounded, to match the title bands ---------- */
+.filters { border-radius: 18px; }
+.filters input, .filters select { border-radius: 12px; }
