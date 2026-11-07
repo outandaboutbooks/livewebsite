@@ -293,7 +293,7 @@ ${analytics}
 ${PIN ? `<aside class="announce" data-announce="${PIN_ID}" aria-label="News"><div class="wrap announce__inner"><span class="announce__tag">News</span><p class="announce__text">${ti(PIN.pin_text || PIN.title)}</p><a class="announce__link" href="${PIN.url}">Find out more<span class="visually-hidden">: ${esc(PIN.title)}</span></a><button type="button" class="announce__x" data-announce-close hidden aria-label="Hide this news"><span aria-hidden="true">&times;</span></button></div></aside>` : ''}
 <header class="site-header">
   <div class="wrap site-header__inner">
-    <a class="site-header__brand" href="/" aria-label="${esc(S.site_name)}, home">${wordmark()}<img class="site-flag" src="/assets/img/brand/pride-flag.svg" alt="" width="63" height="40"></a>
+    <a class="site-header__brand" href="/" aria-label="${esc(S.site_name)}, home">${wordmark()}</a>
     <button type="button" class="menu-toggle" aria-controls="site-nav" aria-expanded="false" hidden><span class="menu-toggle__icon" aria-hidden="true"></span><span class="menu-toggle__label">Menu</span></button>
     <nav class="site-nav" id="site-nav" aria-label="Main">
       <ul>

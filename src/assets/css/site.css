@@ -398,8 +398,9 @@ h1, h2, h3, .section-head h2, .how h2, .imprint h2, .newsletter h2, .page-head h
 /* ===== Logo ===== */
 .site-header__brand, .site-footer__brand a { display: inline-block; line-height: 0; }
 .site-logo { height: 72px; width: auto; }
+.site-header .site-logo { height: 92px; }
 .site-footer .site-logo { height: 72px; }
-@media (max-width: 560px) { .site-header .site-logo { height: 52px; } }
+@media (max-width: 560px) { .site-header .site-logo { height: 64px; } }
 
 /* ---------- colour bands behind page titles ---------- */
 .page-band { --band: var(--hot); --band-ink: #fff; background: var(--band); color: var(--band-ink); margin-bottom: clamp(28px, 4vw, 40px); border-top: 4px solid #fff; position: relative; overflow: hidden; }
@@ -422,7 +423,9 @@ h1, h2, h3, .section-head h2, .how h2, .imprint h2, .newsletter h2, .page-head h
 @media (min-width: 701px) {
   /* The slanted stripes replace the rainbow line under the menu on these pages. */
   body:has(.page-band) .site-header::after { display: none; }
-  .page-band { border-top: 0; }
+  /* The band starts just left of the content and runs off the right-hand edge, with a rounded left end. */
+  .page-band { border-top: 0; margin-left: calc(max(0px, (100vw - var(--wrap)) / 2) + var(--gutter) - 28px); border-radius: 18px 0 0 18px; }
+  .page-band .page-head { max-width: none; margin: 0; padding-left: 28px; }
 }
 @media (min-width: 701px) and (max-width: 1000px) {
   /* Tablets: title above the introduction, stripes still on the right. */
