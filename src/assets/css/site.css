@@ -790,3 +790,9 @@ del { color: var(--ink-soft); }
 /* Tighter gap between the "Browse all our books" bar and the section after it. */
 .shelf { padding-bottom: clamp(32px, 4vw, 48px); }
 .shelf + .how-band .how { padding-top: clamp(16px, 2vw, 24px); }
+
+/* ---------- Footer: larger logo, centred in its column ---------- */
+.site-footer__brand { display: flex; align-items: center; justify-content: center; }
+.site-footer__brand a { margin: 0; }
+.site-footer .site-logo { height: 150px; }
+@media (max-width: 560px) { .site-footer .site-logo { height: 110px; } }

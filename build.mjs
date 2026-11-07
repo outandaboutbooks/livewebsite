@@ -329,7 +329,6 @@ ${INSTAGRAM ? `<section class="ig-band" aria-labelledby="ig-band-h">
   <div class="wrap site-footer__grid">
     <div class="site-footer__brand">
       <a href="/" aria-label="${esc(S.site_name)}, home">${wordmark()}</a>
-      <p>${t(S.strapline)}</p>
     </div>
     <nav aria-label="Books">
       <h2>Books</h2>
