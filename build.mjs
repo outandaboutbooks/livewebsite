@@ -68,17 +68,18 @@ const PAGES = Object.fromEntries(
 const DRAFTS = process.env.OAB_DRAFTS === '1';
 const DRAFT_PAGES = {};
 const DRAFT_URLS = new Set();
+const PAGES_RAW = { ...PAGES }; // before unpublished pages are taken out
 for (const [slug, p] of Object.entries(PAGES)) {
   if (p.published === false) { if (DRAFTS) DRAFT_PAGES[slug] = p; delete PAGES[slug]; }
 }
 // The News page (content/pages/news.json) only holds the News page's title, introduction and colour:
 // the page itself is built from the news posts, further down. Unpublishing it switches news off on the website.
-const NEWS_PAGE = PAGES.news || DRAFT_PAGES.news || {};
-const NEWS_OFF = (NEWS_PAGE.published === false || (!PAGES.news && DRAFT_PAGES.news)) && !DRAFTS;
+const NEWS_PAGE = PAGES_RAW.news || {};
+const NEWS_OFF = NEWS_PAGE.published === false && !DRAFTS;
 delete PAGES.news; delete DRAFT_PAGES.news;
 // The Our books page (content/pages/books.json) holds that page's title, introduction, colour and menu name.
 // The page itself is built from the books.
-const BOOKS_PAGE = PAGES.books || DRAFT_PAGES.books || {};
+const BOOKS_PAGE = PAGES_RAW.books || {};
 delete PAGES.books; delete DRAFT_PAGES.books;
 
 const AVAIL = {
