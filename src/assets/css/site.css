@@ -787,3 +787,6 @@ del { color: var(--ink-soft); }
 .shelf__all:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 @media (max-width: 560px) { .shelf__all { padding: 18px 20px; font-size: 1.1rem; } }
 @media (prefers-reduced-motion: reduce) { .shelf__all, .shelf__all span:last-child { transition: none; } }
+/* Tighter gap between the "Browse all our books" bar and the section after it. */
+.shelf { padding-bottom: clamp(32px, 4vw, 48px); }
+.shelf + .how-band .how { padding-top: clamp(16px, 2vw, 24px); }
