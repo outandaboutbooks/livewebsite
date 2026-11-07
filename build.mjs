@@ -526,7 +526,7 @@ const add = (urlPath, html) => { pages[urlPath] = html; };
       <h1 class="bold-hero__title">${heroLines.map((l) => `<span>${esc(l)}</span>`).join(' ')}</h1>
       ${HOME.hero_strapline ? `<p class="bold-hero__strap">${HOME.hero_strapline.split(/(?<=\.)\s+/).map((l) => `<span>${esc(l)}</span>`).join(' ')}</p>` : ''}
       <p class="bold-hero__sub">${ti(HOME.hero_text)}</p>
-      <p class="bold-hero__actions"><a class="btn btn--light" href="/books/">${esc(HOME.hero_button)}</a> <a class="btn btn--ghost" href="#how-to-buy">How to buy</a></p>
+      <p class="bold-hero__actions"><a class="btn btn--light" href="/books/">${esc(HOME.hero_button)}</a>${HOME.show_how !== false ? ' <a class="btn btn--ghost" href="#how-to-buy">How to buy</a>' : ''}</p>
     </div>
     ${heroBooks.length > 1 ? `<div class="hero-books" data-hero-cycle aria-roledescription="carousel" aria-label="Featured books">
       ${heroBooks.map((hb, i) => `<a class="bold-hero__book${i === 0 ? ' is-active' : ''}${LAUNCHES.has(hb) ? ' is-launch' : ''}" href="${hb.url}"${i ? ' inert aria-hidden="true"' : ''}>${sticker(hb)}${cover(hb, { size: 'lg', eager: i === 0 })}${LAUNCHES.has(hb) ? `<span class="visually-hidden"> (${launchWords(hb)[0]})</span>` : ''}</a>`).join('')}
@@ -537,31 +537,31 @@ const add = (urlPath, html) => { pages[urlPath] = html; };
       ${heroBooks.map((hb, i) => launchLink(hb, i, i !== 0)).join('')}
     </div>` : heroLead ? `<div class="hero-books hero-books--single"><a class="bold-hero__book${LAUNCHES.has(heroLead) ? ' is-launch' : ''}" href="${heroLead.url}">${sticker(heroLead)}${cover(heroLead, { size: 'lg', eager: true })}</a>${launchLink(heroLead, 0, false)}</div>` : ''}
   </section></div>
-  ${(HOME.ticker || []).length ? `<div class="ticker" aria-hidden="true"><div class="ticker__track">${Array(4).fill((HOME.ticker || []).map((w) => `<span>${esc(w)}</span>`).join('')).join('')}</div></div>` : ''}
-  <section class="shelf wrap" aria-labelledby="shelf-h">
+  ${(HOME.ticker || []).length && HOME.show_ticker !== false ? `<div class="ticker" aria-hidden="true"><div class="ticker__track">${Array(4).fill((HOME.ticker || []).map((w) => `<span>${esc(w)}</span>`).join('')).join('')}</div></div>` : ''}
+  ${HOME.show_featured !== false ? `<section class="shelf wrap" aria-labelledby="shelf-h">
     <div class="section-head">
       <h2 id="shelf-h">${t(HOME.books_heading)}</h2>
       <p>${ti(HOME.books_text)}</p>
     </div>
     <div class="book-grid">${shelf.map((b) => bookCard(b)).join('')}</div>
-    <p class="shelf__more"><a class="btn btn--secondary" href="/books/">Browse all books</a></p>
-  </section>
+    <p class="shelf__more"><a class="shelf__all" href="/books/"><span>Browse all our books</span><span aria-hidden="true">&rarr;</span></a></p>
+  </section>` : ''}
 
-  ${homeQuotes.length ? `<section class="home-quotes" aria-labelledby="hq-h"><div class="wrap">
+  ${homeQuotes.length && HOME.show_quotes !== false ? `<section class="home-quotes" aria-labelledby="hq-h"><div class="wrap">
     <h2 id="hq-h">What readers say</h2>
     <div class="home-quotes__list">${homeQuotes.map(({ r, b }) => `<figure class="review-card">${starsHTML(r.rating)}<blockquote>${md(r.text)}</blockquote><figcaption>${esc(r.name)}, on <a href="${b.url}"><cite>${t(b.title)}</cite></a></figcaption></figure>`).join('')}</div>
   </div></section>` : ''}
 
-  <div class="how-band"><section class="how wrap" id="how-to-buy" aria-labelledby="how-h">
+  ${HOME.show_how !== false ? `<div class="how-band"><section class="how wrap" id="how-to-buy" aria-labelledby="how-h">
     <h2 id="how-h">How to buy our books</h2>
     <ol class="how__steps">
       <li><h3>Choose a book</h3><p>Browse <a href="/books/">our books</a> and open any title to read the full description.</p></li>
       <li><h3>Pick a format</h3><p>Each book page lists the paperback, hardback and eBook editions that are available, with prices.</p></li>
       <li><h3>Buy it your way</h3><p>Buy on Amazon, where paperbacks are printed to order and eBooks arrive on Kindle straight away. Some titles are also sold by other shops, linked on the book page.</p></li>
     </ol>
-  </section></div>
+  </section></div>` : ''}
 
-  <section class="imprint" aria-labelledby="imprint-h">
+  ${HOME.show_imprint !== false ? `<section class="imprint" aria-labelledby="imprint-h">
     <div class="wrap imprint__inner">
       <img class="imprint__mark" src="/assets/img/brand/logo-stacked-white.svg" alt="" width="160" height="110">
       <div>
@@ -570,7 +570,7 @@ const add = (urlPath, html) => { pages[urlPath] = html; };
         ${PAGES.about ? `<p><a class="link-light" href="/about/">${esc(HOME.about_link)}</a></p>` : ''}
       </div>
     </div>
-  </section>
+  </section>` : ''}
   ${newsletter()}`;
   const jsonld = {
     '@context': 'https://schema.org',

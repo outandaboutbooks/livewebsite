@@ -15,5 +15,10 @@
     "Second chances",
     "Small towns",
     "Wild coastlines"
-  ]
+  ],
+  "show_ticker": true,
+  "show_featured": true,
+  "show_quotes": false,
+  "show_how": true,
+  "show_imprint": false
 }

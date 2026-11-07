@@ -755,3 +755,35 @@ del { color: var(--ink-soft); }
 .filters { border-radius: 18px; }
 .filters input, .filters select { border-radius: 12px; }
 
+
+/* ---------- How to buy: timeline (numbered circles joined by a line) ---------- */
+@media (min-width: 761px) { .how h2 { text-align: center; } }
+.how__steps { position: relative; gap: 40px; }
+.how__steps::before { content: ""; position: absolute; left: 16.6%; right: 16.6%; top: 36px; height: 4px; background: var(--ink); border-radius: 2px; }
+.how__steps li { border: 0; background: none; padding: 0; text-align: center; position: relative; box-shadow: none; }
+.how__steps li::before { width: 76px; height: 76px; margin: 0 auto 18px; display: grid; place-items: center; border-radius: 50%; color: #fff !important; font-size: 2.2rem; border: 4px solid var(--paper); position: relative; z-index: 1; }
+.how__steps li:nth-child(3n+1)::before { background: var(--hot); }
+.how__steps li:nth-child(3n+2)::before { background: #2f5fd0; }
+.how__steps li:nth-child(3n)::before { background: #008026; }
+.how__steps p { max-width: 22em; margin-inline: auto; }
+@media (max-width: 760px) {
+  /* Phones: the line runs down the left, with each step's text beside its circle. */
+  .how__steps { gap: 26px; }
+  .how__steps::before { display: none; }
+  .how__steps li:not(:last-child)::after { content: ""; position: absolute; left: 36px; top: 70px; bottom: -32px; width: 4px; background: var(--ink); }
+  .how__steps li { text-align: left; display: grid; grid-template-columns: 76px 1fr; column-gap: 18px; align-items: start; }
+  .how__steps li::before { grid-row: span 2; margin: 0; }
+  .how__steps h3 { margin-top: 10px; }
+  .how__steps p { margin-inline: 0; }
+}
+
+/* ---------- Home page: "Browse all our books" as a full-width pink bar ---------- */
+.shelf__more { margin-top: 32px; }
+.shelf__all { display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; background: var(--hot); color: #fff; border-radius: 18px; padding: 22px 30px;
+  font: 700 calc(1.3rem * var(--hs, 1)) var(--display); text-decoration: none; transition: background .15s; }
+.shelf__all span:last-child { font-size: 1.8rem; line-height: 1; transition: transform .15s; }
+.shelf__all:hover { background: #a8124f; color: #fff; }
+.shelf__all:hover span:last-child { transform: translateX(6px); }
+.shelf__all:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+@media (max-width: 560px) { .shelf__all { padding: 18px 20px; font-size: 1.1rem; } }
+@media (prefers-reduced-motion: reduce) { .shelf__all, .shelf__all span:last-child { transition: none; } }

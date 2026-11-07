@@ -250,6 +250,11 @@ content:
       - { name: hero_strapline, label: Strapline, type: string, description: "The yellow line under the main heading. Leave blank to hide it." }
       - { name: hero_text, label: Introduction, type: text }
       - { name: hero_button, label: Button text, type: string }
+      - { name: show_ticker, label: Show the purple scrolling banner, type: boolean, default: true }
+      - { name: show_featured, label: Show New and featured books, type: boolean, default: true }
+      - { name: show_quotes, label: Show What readers say, type: boolean, default: true }
+      - { name: show_how, label: Show How to buy our books, type: boolean, default: true }
+      - { name: show_imprint, label: Show the blue independent imprint section, type: boolean, default: true }
       - { name: books_heading, label: Books section heading, type: string }
       - { name: books_text, label: Books section text, type: text }
       - { name: about_heading, label: About section heading, type: string }

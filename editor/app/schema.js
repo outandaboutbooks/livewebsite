@@ -228,6 +228,13 @@ window.SCHEMA = (function () {
           { name: 'hero_button', label: 'Button text', type: 'string', small: true },
           { name: 'ticker', label: 'Words in the moving strip', type: 'list', help: 'One phrase per line. Leave empty to hide the strip.' },
         ] },
+        { title: 'Sections on the home page', fields: [
+          { name: 'show_ticker', label: 'Show the purple scrolling banner', type: 'bool', default: true },
+          { name: 'show_featured', label: 'Show "New and featured" books', type: 'bool', default: true },
+          { name: 'show_quotes', label: 'Show "What readers say"', type: 'bool', default: true, help: 'Only appears when you have approved reviews ticked to show on the home page.' },
+          { name: 'show_how', label: 'Show "How to buy our books"', type: 'bool', default: true, help: 'Unticking also removes the "How to buy" button from the opening banner.' },
+          { name: 'show_imprint', label: 'Show the blue "independent imprint" section', type: 'bool', default: true },
+        ] },
         { title: 'Further down', fields: [
           { name: 'books_heading', label: 'Books section heading', type: 'string' },
           { name: 'books_text', label: 'Books section text', type: 'text', rich: 'inline', rows: 2 },
