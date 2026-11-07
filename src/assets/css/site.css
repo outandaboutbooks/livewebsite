@@ -423,9 +423,7 @@ h1, h2, h3, .section-head h2, .how h2, .imprint h2, .newsletter h2, .page-head h
 @media (min-width: 701px) {
   /* The slanted stripes replace the rainbow line under the menu on these pages. */
   body:has(.page-band) .site-header::after { display: none; }
-  /* The band starts just left of the content and runs off the right-hand edge, with a rounded left end. */
-  .page-band { border-top: 0; margin-left: calc(max(0px, (100vw - var(--wrap)) / 2) + var(--gutter) - 28px); border-radius: 18px 0 0 18px; }
-  .page-band .page-head { max-width: none; margin: 0; padding-left: 28px; }
+  .page-band { border-top: 0; }
 }
 @media (min-width: 701px) and (max-width: 1000px) {
   /* Tablets: title above the introduction, stripes still on the right. */
@@ -756,3 +754,4 @@ del { color: var(--ink-soft); }
 /* ---------- Book filters: rounded, to match the title bands ---------- */
 .filters { border-radius: 18px; }
 .filters input, .filters select { border-radius: 12px; }
+

@@ -76,6 +76,10 @@ for (const [slug, p] of Object.entries(PAGES)) {
 const NEWS_PAGE = PAGES.news || DRAFT_PAGES.news || {};
 const NEWS_OFF = (NEWS_PAGE.published === false || (!PAGES.news && DRAFT_PAGES.news)) && !DRAFTS;
 delete PAGES.news; delete DRAFT_PAGES.news;
+// The Our books page (content/pages/books.json) holds that page's title, introduction, colour and menu name.
+// The page itself is built from the books.
+const BOOKS_PAGE = PAGES.books || DRAFT_PAGES.books || {};
+delete PAGES.books; delete DRAFT_PAGES.books;
 
 const AVAIL = {
   available: { label: 'Available', order: 0, buyable: true },
@@ -224,7 +228,7 @@ const MENU_PAGES = Object.entries(PAGES).filter(([slug, p]) => !BUILT_IN_PAGES.i
 const FOOTER_PAGES = Object.entries(PAGES).filter(([slug, p]) => !BUILT_IN_PAGES.includes(slug) && p.show_in_footer);
 
 const NAV_ITEMS = [
-  ['books', ['/books/', 'Our books']],
+  ['books', ['/books/', esc(String(BOOKS_PAGE.menu_label || BOOKS_PAGE.title || 'Our books').trim())]],
   ...((NEWS.length || DRAFT_NEWS.length) && NEWS_PAGE.show_in_menu !== false ? [['news', ['/news/', esc(String(NEWS_PAGE.menu_label || NEWS_PAGE.title || 'News').trim())]]] : []),
   ...(SHOP_ON ? [['shop', ['/shop/', 'Shop']]] : []),
   ...(PAGES.about && PAGES.about.show_in_menu !== false ? [['about', ['/about/', esc(PAGES.about.menu_label ? navLabel(PAGES.about) : 'About us'), childrenOf('about').map(([c, cp]) => [pageUrl(c), esc(navLabel(cp))])]]] : []),
@@ -579,7 +583,7 @@ const add = (urlPath, html) => { pages[urlPath] = html; };
 }
 
 // Catalogue
-const BOOKS_TONE = toneOr(S.books_tone, 'hot');
+const BOOKS_TONE = toneOr(BOOKS_PAGE.tone, toneOr(S.books_tone, 'hot'));
 function catalogue({ title, intro, list, canonical, filters = true, current = '/books/', crumbs = '' }) {
   const opt = (v, l = v) => `<option value="${esc(v)}">${esc(l)}</option>`;
   const avUsed = Object.entries(AVAIL).filter(([k]) => list.some((b) => b.formats.some((f) => f.availability === k)));
@@ -632,8 +636,8 @@ function catalogue({ title, intro, list, canonical, filters = true, current = '/
 }
 
 add('/books/', catalogue({
-  title: 'Our books',
-  intro: 'LGBTQ+ fiction from Out and About Books: love stories, mysteries and journeys across the UK and Europe.',
+  title: String(BOOKS_PAGE.title || 'Our books').trim(),
+  intro: BOOKS_PAGE.intro !== undefined ? fill(BOOKS_PAGE.intro) : 'LGBTQ+ fiction from Out and About Books: love stories, mysteries and journeys across the UK and Europe.',
   list: BOOKS,
   canonical: '/books/',
 }));

@@ -4,7 +4,8 @@
   "intro": "Our books are sold through Amazon and other shops, which deliver your order and handle any returns.",
   "needs_review": false,
   "body": "_Last updated: November 2026_\n\n## Delivery\n\nWe don't sell or post books from this website. When you buy one of our books, you buy it from Amazon or from the shop linked on the book page, and that shop delivers it to you. Postage costs and delivery times are shown by the shop before you pay.\n\nOur paperbacks are printed to order, so allow a few extra days for printing when you order from Amazon.\n\n## Returns, refunds and damaged books\n\nContact the shop you bought from. For Amazon orders, use **Your Orders** in your Amazon account to return a book or report a problem. Your rights as a consumer, including under the Consumer Rights Act 2015, apply to your purchase from that shop.\n\n## eBooks\n\neBooks are sold through Amazon Kindle, and Amazon's Kindle return policy applies.\n\n## Problems with a book itself\n\nIf you find a printing fault or a mistake in one of our books, we'd like to know. Email us at {{contact_email}} and tell us which book and where.",
-  "tone": "cobalt",
+  "tone": "hot",
   "published": true,
-  "layout": "text"
+  "layout": "text",
+  "show_in_footer": true
 }

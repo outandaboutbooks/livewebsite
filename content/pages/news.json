@@ -1,9 +1,10 @@
 {
   "title": "News",
   "slug": "news",
-  "tone": "sun",
+  "tone": "hot",
   "intro": "",
   "body": "",
   "menu_label": "",
-  "published": true
+  "published": false,
+  "show_in_menu": true
 }

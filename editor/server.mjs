@@ -27,6 +27,12 @@ try {
   if (fs.existsSync(path.join(CONTENT, 'pages')) && !fs.existsSync(newsPage)) {
     fs.writeFileSync(newsPage, JSON.stringify({ title: 'News', slug: 'news', tone: 'purple', intro: '', body: '', menu_label: '' }, null, 2) + '\n');
   }
+  const booksPage = path.join(CONTENT, 'pages', 'books.json');
+  if (fs.existsSync(path.join(CONTENT, 'pages')) && !fs.existsSync(booksPage)) {
+    let tone = 'hot';
+    try { tone = JSON.parse(fs.readFileSync(path.join(CONTENT, 'settings.json'), 'utf8')).books_tone || 'hot'; } catch { /* default */ }
+    fs.writeFileSync(booksPage, JSON.stringify({ title: 'Our books', slug: 'books', tone, intro: 'LGBTQ+ fiction from Out and About Books: love stories, mysteries and journeys across the UK and Europe.', menu_label: '' }, null, 2) + '\n');
+  }
 } catch { /* not essential */ }
 const FILES = { home: 'home.json', settings: 'settings.json' };
 const SAFE_NAME = /^[a-z0-9][a-z0-9-]{0,80}\.json$/;

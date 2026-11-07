@@ -4,7 +4,8 @@
   "intro": "What personal information we collect, why, and what your rights are.",
   "needs_review": false,
   "body": "_Last updated: November 2026_\n\n## Who we are\n\nThis website is run by {{trading_name}}. We are the controller of the personal information described here. You can contact us about privacy at {{contact_email}}.\n\n## What we collect and why\n\n**When you contact us.** If you use our contact form or email us, we receive your name, email address and message. We use them to reply to you. Our lawful basis is our legitimate interest in answering enquiries.\n\n**When you sign up to our newsletter.** We collect your email address and use it to send you news about our books. Our lawful basis is your consent, and you can withdraw it at any time by using the unsubscribe link in any email or by contacting us.\n\n**We don't take payments.** You can't buy anything on this website itself, so we don't collect payment or delivery details. When you buy from Amazon or another shop, that shop collects them under its own privacy policy.\n\n## Who we share it with\n\nWe don't sell your personal information to any third parties.\n\nIf you click a link to Amazon or another retailer, that retailer's own privacy policy applies to anything you do on its website.\n\n## How long we keep it\n\nWe keep enquiries for up to five years, and newsletter sign-ups until you unsubscribe.\n\n## Your rights\n\nUnder UK data protection law you have the right to ask for a copy of the personal information we hold about you, and to ask us to correct it, delete it, or stop or limit how we use it. To make a request, email {{contact_email}}. If you're unhappy with how we've handled your information, you can complain to the Information Commissioner's Office at ico.org.uk.",
-  "tone": "cobalt",
+  "tone": "hot",
   "published": true,
-  "layout": "text"
+  "layout": "text",
+  "show_in_footer": true
 }

@@ -149,7 +149,7 @@ window.SCHEMA = (function () {
     pages: {
       label: 'Pages', single: 'page', titleField: 'title',
       intro: 'The built-in pages (About, Questions, Contact and the policies), plus any pages you add.',
-      builtIn: ['about.json', 'faq.json', 'contact.json', 'news.json', 'privacy.json', 'cookies.json', 'terms.json', 'delivery-returns.json'],
+      builtIn: ['about.json', 'faq.json', 'contact.json', 'news.json', 'books.json', 'privacy.json', 'cookies.json', 'terms.json', 'delivery-returns.json'],
       layouts: [['text', 'Text page'], ['image', 'Image and text'], ['cards', 'Cards'], ['gallery', 'Gallery'], ['feature', 'Feature']],
       newData: function (title, layout, parent) {
         return { title: title, slug: '', layout: layout || 'text', tone: 'cobalt', intro: '', body: '', parent: parent || '', show_in_menu: true, show_in_footer: true, menu_label: '',
@@ -157,13 +157,13 @@ window.SCHEMA = (function () {
       },
       groups: [
         { title: 'The page', fields: [
-          { name: 'published', label: 'Published on the website', type: 'bool', default: true, publish: true, help: 'Untick to take this page off the website: it disappears from the menu and footer too. It stays here in the editor, and you can still see it in Preview, marked as a draft. Links to it from your own text will stop working while it is unpublished. Keep the privacy policy published: the law expects one.' },
+          { name: 'published', label: 'Published on the website', type: 'bool', default: true, publish: true, notFile: ['books.json'], help: 'Untick to take this page off the website: it disappears from the menu and footer too. It stays here in the editor, and you can still see it in Preview, marked as a draft. Links to it from your own text will stop working while it is unpublished. Keep the privacy policy published: the law expects one.' },
           { name: 'title', label: 'Page title', type: 'string', required: true },
           { name: 'parent', label: 'Parent page (put this page under another)', type: 'pageparent', newOnly: true, help: 'Any page in the top menu can have sub-pages: About us, Questions, Contact or a page you\'ve added. e.g. put Book launch under Events, or Meet the author under About us. It then appears in that page\'s drop-down menu, and its address becomes /events/book-launch/. One level only, so a sub-page can\'t have sub-pages of its own.' },
-          { name: 'layout', label: 'Layout', type: 'select', rerender: true, small: true, notFile: ['news.json'], options: [['text', 'Text page'], ['image', 'Image and text'], ['cards', 'Cards'], ['gallery', 'Gallery'], ['feature', 'Feature']], help: 'Changing the layout keeps everything you have typed.' },
+          { name: 'layout', label: 'Layout', type: 'select', rerender: true, small: true, notFile: ['news.json', 'books.json'], options: [['text', 'Text page'], ['image', 'Image and text'], ['cards', 'Cards'], ['gallery', 'Gallery'], ['feature', 'Feature']], help: 'Changing the layout keeps everything you have typed.' },
           { name: 'tone', label: 'Title band colour', type: 'colour', notFor: ['feature'], options: TONE_OPTIONS },
           { name: 'intro', label: 'Introduction', type: 'text', rich: 'inline', rows: 3, help: 'Shown under the title. On the Feature layout, this is the line under the big heading.' },
-          { name: 'needs_review', label: 'Needs legal review', type: 'bool', builtInOnly: true, notFile: ['news.json'], help: "Shows a 'needs legal review' notice on the page. Untick once the page has been checked." },
+          { name: 'needs_review', label: 'Needs legal review', type: 'bool', builtInOnly: true, notFile: ['news.json', 'books.json'], help: "Shows a 'needs legal review' notice on the page. Untick once the page has been checked." },
         ] },
         { title: 'Picture and button', when: ['image', 'feature'], fields: [
           { name: 'image', label: 'Picture', type: 'image', kind: 'wide', help: 'Large images are shrunk automatically.' },
@@ -193,7 +193,7 @@ window.SCHEMA = (function () {
               { name: 'image_alt', label: 'Picture description (for screen readers)', type: 'string', help: 'Leave blank to use the caption.' },
             ] },
         ] },
-        { title: 'Page content', fields: [
+        { title: 'Page content', notFile: ['books.json'], fields: [
           { name: 'body', label: 'Text', type: 'text', rich: 'block', rows: 14, help: 'Use the toolbar for headings, bold, italic, links and lists. Anything in [square brackets] is highlighted on the site as a placeholder. {{contact_email}}, {{trading_name}}, {{business_address}} and {{reply_time}} are filled in from Site settings. On the Cards and Gallery layouts this text appears above them.' },
         ] },
         { title: 'Closing call to action', when: ['feature'], fields: [
@@ -209,8 +209,8 @@ window.SCHEMA = (function () {
         ] },
         { title: 'Where it appears', builtInGroup: true, fields: [
           { name: 'show_in_menu', label: 'Show in the menu', type: 'bool', default: true, onlyFile: ['about.json', 'faq.json', 'contact.json', 'news.json'], help: 'Untick to take this page out of the menu at the top. The page still works. (The News page only appears in the menu once there is a post.)' },
-          { name: 'menu_label', label: 'Menu name (optional)', type: 'string', small: true, onlyFile: ['about.json', 'faq.json', 'contact.json', 'news.json'], help: 'A shorter or different name for the menu, e.g. FAQs.' },
-          { name: 'show_in_footer', label: 'Show in the footer', type: 'bool', default: true, notFile: ['news.json'], help: 'Untick to take this page\'s link out of the footer. The page still works. To take a page off the website completely, untick Published at the top instead. Keep the Privacy policy in the footer: visitors should always be able to find it.' },
+          { name: 'menu_label', label: 'Menu name (optional)', type: 'string', small: true, onlyFile: ['about.json', 'faq.json', 'contact.json', 'news.json', 'books.json'], help: 'A shorter or different name for the menu, e.g. FAQs.' },
+          { name: 'show_in_footer', label: 'Show in the footer', type: 'bool', default: true, notFile: ['news.json', 'books.json'], help: 'Untick to take this page\'s link out of the footer. The page still works. To take a page off the website completely, untick Published at the top instead. Keep the Privacy policy in the footer: visitors should always be able to find it.' },
         ] },
         { title: 'Web address', builtInGroup: true, fields: [
           { name: 'slug', label: 'Web address', type: 'string', readonly: true, help: 'Fixed for the built-in pages.' },
@@ -272,7 +272,6 @@ window.SCHEMA = (function () {
           { name: 'heading_colour', label: 'Heading colour', type: 'colour', paper: true, default: 'ink', options: [['ink', 'Charcoal (standard)']].concat(TONE_OPTIONS), help: 'For headings on the cream background. Headings on coloured bands and banners keep their white or dark text.' },
         ] },
         { title: 'Title band colours', fields: [
-          { name: 'books_tone', label: 'Our books page', type: 'colour', default: 'hot', options: TONE_OPTIONS, help: 'Also used for the genre and series pages.' },
           { name: 'shop_tone', label: 'Shop page', type: 'colour', default: 'sun', options: TONE_OPTIONS },
         ] },
         { title: 'Switches', fields: [

@@ -4,7 +4,8 @@
   "intro": "The terms that apply when you use this website.",
   "needs_review": false,
   "body": "_Last updated: November 2026_\n\n## About us\n\nThis website is run by {{trading_name}}, trading as Out and About Books. You can email us at {{contact_email}}.\n\n## Using this website\n\nYou're welcome to browse and share links to this website. The text, cover art and other content on it belong to us or to our authors and artists, and you may not copy or reuse them without permission, except for short quotations in reviews.\n\nWe try to keep the information on this website accurate, but book details, availability and prices can change.\n\n## Buying from Amazon and other retailers\n\nSome buttons on this website take you to Amazon or other retailers. If you buy there, your contract is with that retailer, and its terms, prices, delivery and returns policies apply, not ours.\n\n## Selling directly\n\nWe don't currently sell books or other goods directly from this website. If we start, we'll add the terms that apply to those sales here first.\n\n## Disputes\n\nIf you have a problem with this website, please contact us first and we'll do our best to put it right.",
-  "tone": "cobalt",
+  "tone": "hot",
   "published": true,
-  "layout": "text"
+  "layout": "text",
+  "show_in_footer": true
 }

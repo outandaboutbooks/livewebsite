@@ -4,7 +4,8 @@
   "intro": "This website doesn't use advertising or tracking cookies.",
   "needs_review": false,
   "body": "_Last updated: November 2026_\n\n## What we use\n\nWe don't use cookies to track you, to show you adverts or to measure how you use the website.\n\nThis website doesn't set any cookies of its own, so there's nothing to accept or decline.\n\n## Other websites\n\nWhen you follow a link to Amazon or another shop, that website's own cookie policy applies.",
-  "tone": "cobalt",
+  "tone": "hot",
   "published": true,
-  "layout": "text"
+  "layout": "text",
+  "show_in_footer": true
 }

@@ -506,7 +506,7 @@
       if (data.sample) main.append(h('p', { class: 'note', text: 'This is a sample listing. Replace its details with a real one, or delete it.' }));
       var ctx = { builtIn: !!(schema.builtIn && schema.builtIn.indexOf(file) >= 0), file: file || '' };
       // Pages saved before the colour choice existed: show the colour the site actually uses, so saving doesn't change it.
-      if (key === 'pages' && !data.tone) data.tone = file === 'faq.json' ? 'sun' : file === 'contact.json' ? 'hot' : file === 'news.json' ? 'purple' : 'cobalt';
+      if (key === 'pages' && !data.tone) data.tone = file === 'faq.json' ? 'sun' : file === 'contact.json' || file === 'books.json' ? 'hot' : file === 'news.json' ? 'purple' : 'cobalt';
       state.currentFile = file || '';
       var formEl = h('form', { class: 'form', novalidate: true, onsubmit: function (e) { e.preventDefault(); save(false); } }, renderForm(schema, data, ctx));
       state.rerender = function () {
@@ -605,7 +605,7 @@
 
     function draw(all, settings) {
       var bi = function (slug, name) { var p = all.find(function (x) { return x.slug === slug; }); return p && p.menuOn ? [[slug, p.label || name]] : []; };
-      var items = [['books', 'Our books']].concat(hasNews ? bi('news', 'News') : [], settings.show_shop ? [['shop', 'Shop']] : [], bi('about', 'About us'),
+      var items = [['books', (all.find(function (x) { return x.slug === 'books'; }) || {}).title || 'Our books']].concat(hasNews ? bi('news', 'News') : [], settings.show_shop ? [['shop', 'Shop']] : [], bi('about', 'About us'),
         all.filter(function (p) { return !p.builtIn && !p.parent && p.menu; }).map(function (p) { return [p.slug, p.title]; }),
         bi('faq', 'Questions'), bi('contact', 'Contact'));
       var keys = items.map(function (x) { return x[0]; });
